@@ -4,6 +4,8 @@ package is.pedro;
  * Created by andri on 16/03/16.
  */
 
+
+import spark.*;
 import static spark.Spark.*;
 import spark.servlet.SparkApplication;
 
@@ -21,34 +23,34 @@ public class WebUI implements SparkApplication {
     @Override
     public void init() {
         final Repo repo = new Repo();
-        ArrayList<Case> pCases = repo.getPreviousCases();
+        ArrayList<Case> pCases = repo.getPreviousCases(9, 'M');
         final CBR cbr = new CBR(pCases);
-        Case currentCase = new Case(null, null, "Bla");
+        Case currentCase = new Case(null, null, 9, 'M', "Bla");
 
-        post("/initinfo", (req, res) -> {
-            currentCase.setAge(req.queryParams("age"));
-            currentCase.setGender(req.queryParams("gender"));
-            res.status(200);
-            return res;
+        post("/initinfo", (request, response) -> {
+            currentCase.setAge(Integer.parseInt(request.queryParams("age")));
+            currentCase.setGender(request.queryParams("gender").charAt(0));
+            response.status(200);
+            return response;
         });
 
-        post("/answer", (req, res) -> {
-            if (req.queryParams("answer")) {
-                currentCase.addToHas(req.queryParams("symptom"));
+        post("/answer", (request, response) -> {
+            if (request.queryParams("answer").equals("true")) {
+                currentCase.addToHas(Integer.parseInt(request.queryParams("symptom")));
             }
             else {
-                currentCase.addToNotHas(req.queryParams("symptom"));
+                currentCase.addToHasNot(Integer.parseInt(request.queryParams("symptom")));
             }
-            res.status(200);
-            return res;
+            response.status(200);
+            return response;
         });
 
         post("/confirm", (req, res) -> {
-            if (req.queryParams("answer")) {
-                currentCase.addToHas(req.queryParams("symptom"));
+            if (req.queryParams("answer").equals("true")) {
+                repo.addCase(currentCase);
             }
             else {
-                currentCase.addToNotHas(req.queryParams("symptom"));
+                return "bal";
             }
             res.status(200);
             return res;
@@ -60,11 +62,10 @@ public class WebUI implements SparkApplication {
         });
 
         get("/done", (req, res) -> {
-            //String diagnosis = cbr.findDiagnosis(currentCase);
+            String diagnosis = cbr.findDiagnosis(currentCase);
             res.status(200);
             return res;
         });
-
 
     }
 

@@ -55,13 +55,13 @@ INSERT INTO Diagnosis VALUES ('Urinary Tract Infection (Upper)');
 INSERT INTO Diagnosis VALUES ('Urinary Tract Infection (Lower)');
 INSERT INTO Diagnosis VALUES ('Acute Upper Respiratory Tract Infection');
 
-INTO Cases (diagnosisId, age, gender, pain, nausea, voimiting, dizziness, fatigue, presyncope, syncope, clammy skin, cold sweat, sweating, dyspepsia, anxiety, arrythmia, dyspnea)
+INSERT INTO Cases (diagnosisId, age, gender, pain, nausea, voimiting, dizziness, fatigue, presyncope, syncope, clammyskin, coldsweat, sweating, dyspepsia, anxiety, arrythmia, dyspnea)
 	VALUES (1, 65, 'm', true, true, true, true, true, true, true, true, true, true, true, true, true, true);
-INTO Cases (diagnosisId, age, gender, cough, pain, fever, chills, dyspnea, tachypnea, wheezing, tachycardia, dehydration, fatigue, malaise, clammy skin, sweating)
+INSERT INTO Cases (diagnosisId, age, gender, cough, pain, fever, chills, dyspnea, tachypnea, wheezing, tachycardia, dehydration, fatigue, malaise, clammy skin, sweating)
 	VALUES (2, 80, 'f', true, true, true, true, true, true, true, true, true, true, true, true, true);
-INTO Cases (diagnosisId, age, gender, pain, urinary frequency, dysuria, cloudy urine, hematuria, smelly urine, fatigue, fever, malaise, nausea, voimting, hypotension, tachycardia)
+INSERT INTO Cases (diagnosisId, age, gender, pain, urinary frequency, dysuria, cloudy urine, hematuria, smelly urine, fatigue, fever, malaise, nausea, voimting, hypotension, tachycardia)
 	VALUES (3, 35, 'f', true, true, true, true, true, true, true, true, true, true, true, true, true);
-INTO Cases (diagnosisId, age, gender, pain, urinary frequency, dysuria, cloudy urine, hematuria, smelly urine, sense of incomplete bladder emptying, fever)
+INSERT INTO Cases (diagnosisId, age, gender, pain, urinary frequency, dysuria, cloudy urine, hematuria, smelly urine, sense of incomplete bladder emptying, fever)
 	VALUES (4, 42, 'f', true, true, true, true, true, true, true, true);
-INTO Cases (diagnosisId, age, gender, pain, cough, chills, fever, fatigue, malaise, dehydration, sweating, rhinitis, rhinorrhea, sneezing, dyspnea, pharingitis, conjunctivitis)
+INSERT INTO Cases (diagnosisId, age, gender, pain, cough, chills, fever, fatigue, malaise, dehydration, sweating, rhinitis, rhinorrhea, sneezing, dyspnea, pharingitis, conjunctivitis)
 	VALUES (5, 3, 'm', true, true, true, true, true, true, true, true, true, true, true, true, true, true);

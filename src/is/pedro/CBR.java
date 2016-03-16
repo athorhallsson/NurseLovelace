@@ -32,11 +32,11 @@ public class CBR {
 
     private int compareCases(Case c1, Case c2) {
         int difference = 0;
-        for (int i = 0; i < c1.symptoms.length; i++) {
+     /*   for (int i = 0; i < c1.symptoms.length; i++) {
             if (c1.symptoms[i] != c2.symptoms[i]) {
                 difference += 1;
             }
-        }
+        }*/
         return difference;
     }
 }

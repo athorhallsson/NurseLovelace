@@ -24,7 +24,7 @@ public class Repo {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
                     .getConnection("jdbc:postgresql://localhost:5432/diagnosisdb",
-                            "postgresn", "ada");
+                            "postgres", "nopassword");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());
@@ -82,7 +82,8 @@ public class Repo {
 
         try {
             s = c.createStatement();
-            ResultSet rs = s.executeQuery( "SELECT * FROM Cases c WHERE c.age = " + age + " AND c.gender = " + gender + ";");
+            //ResultSet rs = s.executeQuery( "SELECT * FROM Cases c WHERE c.age = " + age + " AND c.gender = " + gender + ";");
+            ResultSet rs = s.executeQuery( "SELECT * FROM Cases c;");
             int size = rs.getMetaData().getColumnCount();
 
             while (rs.next()) {
@@ -91,13 +92,13 @@ public class Repo {
 
                 for (int i = 4; i <= size; i++) {
                     Boolean bool = rs.getBoolean(i);
-                    if (rs.wasNull())
+                   // if (rs.wasNull())
                 }
-                hasSx.add(rs.getBoolean())
-                cases.add(new Case(arr, rs.getString("diagnosis")));
+               // hasSx.add(rs.getBoolean());
+               // cases.add(new Case(arr, rs.getString("diagnosis")));
             }
             rs.close();
-            stmt.close();
+           // stmt.close();
         } catch (Exception e) {
             System.err.println( e.getClass().getName()+": "+ e.getMessage() );
             System.exit(0);

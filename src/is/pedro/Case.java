@@ -1,6 +1,7 @@
 package is.pedro;
 
 import java.util.HashSet;
+import java.util.InputMismatchException;
 
 /**
  * Created by andri on 13/03/16.
@@ -23,6 +24,14 @@ public class Case {
     public void setDiagnosis(String diagnosis) {
         this.diagnosis = diagnosis;
     }
+
+    public void setAge(Integer age) { this.age = age; }
+
+    public void setGender(Character gender) { this.gender = gender; }
+
+    public void addToHas(Integer symptom) { hasSx.add(symptom); }
+
+    public void addToHasNot (Integer symptom) { hasNotSx.add(symptom); }
 
     @Override
     public String toString() {
