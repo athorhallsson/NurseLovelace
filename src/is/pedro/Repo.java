@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Created by andri on 13/03/16.
@@ -32,16 +34,40 @@ public class Repo {
 
     public void addCase(Case newCase) {
         Statement s;
-        boolean[] arr = newCase.symptoms;
         try {
             s = c.createStatement();
-            StringBuilder sql = new StringBuilder("INSERT INTO Cases (fever, cough, diarrhea, nausea, bloodystool, bloodyvomit, diagnosis) VALUES (");
-            for (int i = 0; i < arr.length; i++) {
-                sql.append(arr[i]);
-                sql.append(", ");
+            StringBuilder hasQuery = new StringBuilder("INSERT INTO Cases (");
+            hasQuery.append("diagnosis, age, gender, ");
+            for (Integer sx : newCase.hasSx) {
+                hasQuery.append(sx + 3 + ", ");
             }
-            sql.append("'" + newCase.diagnosis + "');");
-            s.executeUpdate(sql.toString());
+            for (Iterator<Integer> i = newCase.hasNotSx.iterator(); i.hasNext();) {
+                Integer notSx = i.next();
+                hasQuery.append(notSx + 3);
+                if (i.hasNext()) {
+                    hasQuery.append(", ");
+                }
+                else {
+                    hasQuery.append(") VALUES (");
+                }
+            }
+            hasQuery.append(newCase.diagnosis + ", ");
+            hasQuery.append(newCase.age + ", ");
+            hasQuery.append(newCase.gender + ", ");
+            for (Integer sx : newCase.hasSx) {
+                hasQuery.append("true, ");
+            }
+            for (Iterator<Integer> i = newCase.hasNotSx.iterator(); i.hasNext();) {
+                Integer notSx = i.next();
+                hasQuery.append("false");
+                if (i.hasNext()) {
+                    hasQuery.append(", ");
+                }
+                else {
+                    hasQuery.append(");");
+                }
+            }
+            s.executeUpdate(hasQuery.toString());
             s.close();
         } catch (Exception e) {
             System.err.println( e.getClass().getName()+": "+ e.getMessage() );
@@ -50,18 +76,24 @@ public class Repo {
 
     }
 
-    public ArrayList<Case> getPreviousCases() {
+    public ArrayList<Case> getPreviousCases(int age, char gender) {
         ArrayList<Case> cases = new ArrayList<Case>();
-        Statement stmt = null;
+        Statement s;
 
         try {
-            stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM Cases;" );
+            s = c.createStatement();
+            ResultSet rs = s.executeQuery( "SELECT * FROM Cases c WHERE c.age = " + age + " AND c.gender = " + gender + ";");
+            int size = rs.getMetaData().getColumnCount();
+
             while (rs.next()) {
-                boolean[] arr = new boolean[Constants.numberOfSymptoms];
-                for (int i = 0; i < Constants.numberOfSymptoms; i++) {
-                    arr[i] = rs.getBoolean(i + 1);
+                HashSet<Integer> hasSx = new HashSet<>();
+                HashSet<Integer> hasNotSx = new HashSet<>();
+
+                for (int i = 4; i <= size; i++) {
+                    Boolean bool = rs.getBoolean(i);
+                    if (rs.wasNull())
                 }
+                hasSx.add(rs.getBoolean())
                 cases.add(new Case(arr, rs.getString("diagnosis")));
             }
             rs.close();

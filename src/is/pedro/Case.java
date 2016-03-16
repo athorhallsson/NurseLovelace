@@ -1,14 +1,22 @@
 package is.pedro;
 
+import java.util.HashSet;
+
 /**
  * Created by andri on 13/03/16.
  */
 public class Case {
-    boolean[] symptoms = null;
+    HashSet<Integer> hasSx = new HashSet<>();
+    HashSet<Integer> hasNotSx = new HashSet<>();
+    int age;
+    char gender;
     String diagnosis = "";
 
-    public Case(boolean[] symptoms, String diagnosis) {
-        this.symptoms = symptoms;
+    public Case(HashSet<Integer> hasSx, HashSet<Integer> hasNotSx, int age, char gender, String diagnosis) {
+        this.hasSx = hasSx;
+        this.hasNotSx = hasNotSx;
+        this.age = age;
+        this.gender = gender;
         this.diagnosis = diagnosis;
     }
 
@@ -19,8 +27,9 @@ public class Case {
     @Override
     public String toString() {
         StringBuilder stb = new StringBuilder();
-        for(int i = 0; i < symptoms.length; i++) {
-            stb.append(symptoms[i] + " ");
+        stb.append(this.age + " " + this.gender + " ");
+        for(Integer sx : hasSx) {
+            stb.append(sx + " ");
         }
         stb.append(diagnosis);
         return stb.toString();
