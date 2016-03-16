@@ -3,10 +3,10 @@
     <head>
         <title>Nurse Lovelace</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css">
-        <!-- load bootstrap for nicer ui -->
         <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-        <link rel="icon" type="image/png" href="favicon.png">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="script.js"></script>
     </head>
     <body>
         <div class="container">
@@ -15,7 +15,7 @@
         <div class="container" id="personal-info">
             <h2>Personal information</h2>
             <p>Please tell us about yourself so we can help</p>
-            <form method="post" action="/initinfo" class="form-inline" role="form">
+            <form id="initinfo" method="post" action="/initinfo" class="form-inline" role="form">
                 <div class="form group">
                     <input type="text" name="age" id="age" placeholder="Age">
                 </div>
@@ -29,9 +29,10 @@
         <div class="container" id="question">
             <h1>Think carefully.</h1>
             <p>Do you have the following symptom?</p>
+            <p id="symptom"><p>
             <form method="post" action="/initinfo" class="form-inline" role="form">
-                <button class="true">Yes</button>
-                <button class="false">No</button>
+                <button type="submit" class="true">Yes</button>
+                <button type="submit" class="false">No</button>
             </form>
             <hr>
             <button id="done-button">Done</button>
@@ -43,34 +44,5 @@
             <div id="results" class="alert alert-info">Try it out.</div>
             <hr>
         </div>
-        <!-- Load jquery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-        <!-- Use ajax to submit form and display on page -->
-        <script>
-        $(document).ready(function() {
-            $("#question").hide();
-
-            var form = $('form');
-            form.submit(function( event ) {
-                var age = $("#age").val();
-                var gender = $("#gender").val();
-                $.ajax({
-                    type: form.attr('method'),
-                    url: form.attr('action'),
-                    data: 'age=' + age + '&gender=' + gender
-                }).done(function() {
-                    $('#results').html('Age set as ' + age + ' and gender set as ' +
-                        gender + '.').attr('class', 'alert alert-success');
-                    $("#personal-info").hide();
-                    $("#question").show();
-                }).fail(function() {
-                    $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
-                });
-                event.preventDefault();
-            });
-
-        });
-        </script>
     </body>
 </html>
