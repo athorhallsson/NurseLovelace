@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Nurse Lovelace</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- load bootstrap for nicer ui -->
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+        <link rel="icon" type="image/png" href="favicon.png">
+    </head>
+    <body>
+        <div class="container personal-info">
+            <h1>Personal information</h1>
+            <p>Please tell us about yourself so we can help</p>
+            <form method="post" action="/setName" class="form-inline" role="form">
+                <div class="form group">
+                    <input type="text" name="age" id="age" placeholder="Age">
+                </div>
+                <div class="form group">
+                    <input type="text" name="gender" id="gender" placeholder="M/F">
+                </div>
+                <button type="submit">Confirm</button>
+            </form>
+            <hr>
+            <div id="results" class="alert alert-info">Try it out.</div>
+            <hr>
+            <p>Done? <a href="/index.html">Done!</a></p>
+        </div>
+
+        <div class="container" id="question">
+            <h1>Think carefully.</h1>
+            <p>Do you have the following symptom?</p>
+            <form method="post" action="/setName" class="form-inline" role="form">
+                <button class="true">Yes</button>
+                <button class="false">No</button>
+            </form>
+            <hr>
+            <div id="results" class="alert alert-info">Try it out.</div>
+            <hr>
+            <button id="done-button">Done</button>
+        </div>
+
+        <!-- Load jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+        <!-- Use ajax to submit form and display on page -->
+        <script>
+        $(document).ready(function() {
+            $("#question").hide();
+
+            var form = $('form');
+            form.submit(function( event ) {
+                var age = $("#age").val();
+                var gender = $("#gender").val();
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: 'age=' + age + '&gender=' + gender
+                }).done(function() {
+                    $('#results').html('Name set as: ' + firstName + ' ' +
+                        lastName + '.').attr('class', 'alert alert-success');
+                }).fail(function() {
+                    $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
+                });
+                event.preventDefault();
+            });
+
+        });
+        </script>
+    </body>
+</html>
