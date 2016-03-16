@@ -1,16 +1,7 @@
-﻿DROP TABLE IF EXISTS Cases, Diagnosis, Symptoms;
-
-CREATE TABLE Diagnosis (
-	dId serial,
-	dName varchar(100) NOT NULL,
-	PRIMARY KEY (dId)
-);
+﻿DROP TABLE IF EXISTS Cases, Diagnois, Symptoms;
 
 CREATE TABLE Cases (
 	caseId serial,
-	diagnosisId integer,
-	age integer NOT NULL,
-	gender char NOT NULL,
 	pain boolean, 
 	anxiety boolean,
 	arrythmia boolean,
@@ -60,13 +51,15 @@ CREATE TABLE Cases (
 	dystonia boolean,
 	akinesia boolean,
 	alexia boolean,
-	chorea boolean,
-	FOREIGN KEY (diagnosisId) REFERENCES Diagnosis (dId),
-	PRIMARY KEY (caseId)
+	chorea boolean
+);
+
+CREATE TABLE Diagnosis (
+	dId serial,
+	dName varchar(100) NOT NULL
 );
 
 CREATE TABLE Symptoms (
 	sId serial,
-	sName varchar(100) NOT NULL,
-	PRIMARY KEY (sId)
+	sName varchar(100) NOT NULL
 );
