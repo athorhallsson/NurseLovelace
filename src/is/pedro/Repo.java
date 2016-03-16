@@ -22,7 +22,7 @@ public class Repo {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
                     .getConnection("jdbc:postgresql://localhost:5432/diagnosisdb",
-                            "andri", "nopasswordneeded");
+                            "postgresn", "ada");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());
