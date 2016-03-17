@@ -12,10 +12,11 @@
         <div class="container">
             <h1>Nurse Lovelace</h1>
         </div>
+
         <div class="container" id="personal-info">
             <h2>Personal information</h2>
             <p>Please tell us about yourself so we can help</p>
-            <form id="initinfo" method="post" action="/initinfo" class="form-inline" role="form">
+            <form id="initform" method="post" action="/initinfo" class="form-inline" role="form">
                 <div class="form group">
                     <input type="text" name="age" id="age" placeholder="Age">
                 </div>
@@ -27,10 +28,23 @@
         </div>
 
         <div class="container" id="question">
-            <h1>Think carefully.</h1>
+            <h2>Think carefully.</h2>
             <p>Do you have the following symptom?</p>
             <p id="symptom"><p>
-            <form method="post" action="/initinfo" class="form-inline" role="form">
+            <form id="questionform" method="post" action="/answer" class="form-inline" role="form">
+                <input id="symptomid" type="hidden" value="0" />
+                <button type="submit" value="true" class="true">Yes</button>
+                <button type="submit" value="false" class="false">No</button>
+            </form>
+            <hr>
+            <button id="done-button">Done</button>
+        </div>
+
+        <div class="container" id="confirm">
+            <h2>We think it's</h2>
+            <p id="diagnosis">A disease</p>
+            <p>Is that correct?<p>
+            <form id="confirmform" method="post" action="/confirm" class="form-inline" role="form">
                 <button type="submit" class="true">Yes</button>
                 <button type="submit" class="false">No</button>
             </form>
@@ -38,10 +52,9 @@
             <button id="done-button">Done</button>
         </div>
 
-
         <div class="container">
             <hr>
-            <div id="results" class="alert alert-info">Try it out.</div>
+            <div id="results" class="alert alert-info">Welcome</div>
             <hr>
         </div>
     </body>
