@@ -4,33 +4,45 @@
         <title>Nurse Lovelace</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" type="text/css" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script type="text/javascript" src="script.js"></script>
     </head>
     <body>
         <div class="container">
             <h1>Nurse Lovelace</h1>
         </div>
-
+        <hr>
         <div class="container" id="personal-info">
             <h2>Personal information</h2>
             <p>Please tell us about yourself so we can help</p>
             <form id="initform" method="post" action="/initinfo" class="form-inline" role="form">
                 <div class="form group">
-                    <input type="text" name="age" id="age" placeholder="Age">
+                    <label for="age">Age: </label>
+                    <select name="age" id="age">
+                    </select>
                 </div>
                 <div class="form group">
-                    <input type="text" name="gender" id="gender" placeholder="M/F">
+                    <label for="gender">Gender: </label>
+                    <select name="gender" id="gender">
+                      <option value="M">Male</option>
+                      <option value="F">Female</option>
+                    </select>
                 </div>
-                <button type="submit">Confirm</button>
+                <div class="ui-widget">
+                    <label for="tags">Main Symptom: </label>
+                    <input id="tags">
+                </div>
+                <button type="submit">Confirm</button> 
             </form>
         </div>
 
         <div class="container" id="question">
             <h2>Think carefully.</h2>
             <p>Do you have the following symptom?</p>
-            <p id="symptom"><p>
+            <p id="symptom">Symptom<p>
             <form id="questionform" method="post" action="/answer" class="form-inline" role="form">
                 <input id="symptomid" type="hidden" value="0" />
                 <button type="submit" value="true" class="true">Yes</button>
@@ -48,8 +60,6 @@
                 <button type="submit" class="true">Yes</button>
                 <button type="submit" class="false">No</button>
             </form>
-            <hr>
-            <button id="done-button">Done</button>
         </div>
 
         <div class="container">

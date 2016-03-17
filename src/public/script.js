@@ -3,6 +3,25 @@ $(document).ready(function() {
             $("#confirm").hide();
            // $("#personal-info").hide();
 
+           var availableTags = [
+                "ActionScript",
+                "Fortran",
+                "Groovy",
+                "Haskell",
+                "Java",
+                "JavaScript",
+                "Lisp",
+            ];
+             $( "#tags" ).autocomplete({
+                source: availableTags
+             });
+            
+            var ageSelect = $("#age" );
+            for (i = 0; i < 120; i++) {
+                ageSelect.append('<option value="' + i + '">' + i + '</option>');
+            }
+            
+
             var initForm = $("#initform");
             initForm.submit(function(event) {
                 var age = $("#age").val();
@@ -22,7 +41,7 @@ $(document).ready(function() {
                 });
                 event.preventDefault();
             });
-/*
+
             var confirmForm = $("#confirmform");
             confirmForm.submit(function(event) {
                 var answer = "true";
@@ -38,7 +57,7 @@ $(document).ready(function() {
                 });
                 event.preventDefault();
             });
-*/
+
             var questionForm = $("#questionform");
             questionForm.submit(function(event) {
                 var answer = "true";
@@ -64,8 +83,6 @@ $(document).ready(function() {
 
             var doneBtn = $("#done-button");
             doneBtn.click(function(event) {
-                var answer = "true";
-                var symptom = $("#symptomid").val();
                 $.ajax({
                     type: "get",
                     url: '/done',
@@ -76,7 +93,8 @@ $(document).ready(function() {
                         $("#diagnosis").html(obj.diagnosis);
                     }
                 }).done(function() {
-                    $("#results").html('Tell us.').attr('class', 'alert alert-success');
+                    $("#results").html('We really hope it is.').attr('class', 'alert alert-success');
+                    $("#question").hide();
                     $("#confirm").show();
                 }).fail(function() {
                     $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');

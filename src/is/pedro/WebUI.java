@@ -53,9 +53,6 @@ public class WebUI implements SparkApplication {
             if (req.queryParams("answer").equals("true")) {
                 repo.addCase(currentCase);
             }
-            else {
-                return "bal";
-            }
             res.status(200);
             return res;
         });
@@ -66,9 +63,10 @@ public class WebUI implements SparkApplication {
         });
 
         get("/done", (req, res) -> {
-            String diagnosis = cbr.findDiagnosis(currentCase);
+            //String diagnosis = cbr.findDiagnosis(currentCase);
+            String diagnosis = "Fake diagnosis";
             res.status(200);
-            return diagnosis;
+            return "{ \"diagnosis\":\""+ diagnosis +"\" }";
         });
 
     }
