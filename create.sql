@@ -9,8 +9,8 @@ CREATE TABLE Diagnosis (
 CREATE TABLE Cases (
 	caseId serial,
 	diagnosisId integer,
-	age integer,
-	gender char, 
+	age integer NOT NULL,
+	gender char NOT NULL, 
 	pain boolean, 
 	anxiety boolean,
 	arrythmia boolean,

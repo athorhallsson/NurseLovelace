@@ -39,11 +39,11 @@ public class Repo {
             StringBuilder hasQuery = new StringBuilder("INSERT INTO Cases (");
             hasQuery.append("diagnosis, age, gender, ");
             for (Integer sx : newCase.hasSx) {
-                hasQuery.append(sx + 3 + ", ");
+                hasQuery.append(sx + 4 + ", ");
             }
             for (Iterator<Integer> i = newCase.hasNotSx.iterator(); i.hasNext();) {
                 Integer notSx = i.next();
-                hasQuery.append(notSx + 3);
+                hasQuery.append(notSx + 4);
                 if (i.hasNext()) {
                     hasQuery.append(", ");
                 }
@@ -57,10 +57,9 @@ public class Repo {
             for (Integer sx : newCase.hasSx) {
                 hasQuery.append("true, ");
             }
-            for (Iterator<Integer> i = newCase.hasNotSx.iterator(); i.hasNext();) {
-                Integer notSx = i.next();
+            for (int i = 0; i < newCase.hasNotSx.size(); i++) {
                 hasQuery.append("false");
-                if (i.hasNext()) {
+                if (i != newCase.hasNotSx.size()) {
                     hasQuery.append(", ");
                 }
                 else {
@@ -83,22 +82,30 @@ public class Repo {
         try {
             s = c.createStatement();
             //ResultSet rs = s.executeQuery( "SELECT * FROM Cases c WHERE c.age = " + age + " AND c.gender = " + gender + ";");
-            ResultSet rs = s.executeQuery( "SELECT * FROM Cases c;");
-            int size = rs.getMetaData().getColumnCount();
+            ResultSet rs = s.executeQuery( "SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did;");
+
+            // Account for the two joined diagnosis columns
+            int size = rs.getMetaData().getColumnCount() - 2;
 
             while (rs.next()) {
-                HashSet<Integer> hasSx = new HashSet<>();
-                HashSet<Integer> hasNotSx = new HashSet<>();
+                HashSet<Integer> hasSx = new HashSet<Integer>();
+                HashSet<Integer> hasNotSx = new HashSet<Integer>();
 
-                for (int i = 4; i <= size; i++) {
+                // Account for cid, did, age and gender columns
+                for (int i = 5; i <= size; i++) {
                     Boolean bool = rs.getBoolean(i);
-                   // if (rs.wasNull())
+                    if (!rs.wasNull()) {
+                        if (bool) {
+                            hasSx.add(i);
+                        } else {
+                            hasNotSx.add(i);
+                        }
+                    }
                 }
-               // hasSx.add(rs.getBoolean());
-               // cases.add(new Case(arr, rs.getString("diagnosis")));
+                cases.add(new Case(hasSx, hasNotSx, rs.getInt("age"), rs.getString("gender").charAt(0), rs.getString("dname")));
             }
             rs.close();
-           // stmt.close();
+            s.close();
         } catch (Exception e) {
             System.err.println( e.getClass().getName()+": "+ e.getMessage() );
             System.exit(0);
@@ -113,7 +120,6 @@ public class Repo {
         try {
             s = c.createStatement();
             ResultSet rs = s.executeQuery( "SELECT * FROM Symptoms s ORDER BY s.sid;");
-            int size = rs.getMetaData().getColumnCount();
 
             while (rs.next()) {
                 symptoms.add(rs.getString("sname"));

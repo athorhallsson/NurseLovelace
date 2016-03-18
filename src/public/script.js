@@ -1,35 +1,48 @@
 $(document).ready(function() {
             $("#question").hide();
             $("#confirm").hide();
-           // $("#personal-info").hide();
 
-           var availableTags = [
-                "ActionScript",
-                "Fortran",
-                "Groovy",
-                "Haskell",
-                "Java",
-                "JavaScript",
-                "Lisp",
-            ];
-             $( "#tags" ).autocomplete({
-                source: availableTags
-             });
-            
+            var symptoms;
+            // Autocomplete symptoms
+            $.ajax({
+                type: "get",
+                url: "/symptoms",
+                data: null, 
+                success : function(text)
+                {
+                    var obj = JSON.parse(text); 
+                    symptoms = obj.symptoms;
+                    $("#tags").autocomplete({
+                        source: symptoms
+                    });
+                }
+            }).fail(function() {
+                $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
+            });
+
+            // Age dropdown list
             var ageSelect = $("#age" );
             for (i = 0; i < 120; i++) {
                 ageSelect.append('<option value="' + i + '">' + i + '</option>');
             }
-            
 
+            // INIT
             var initForm = $("#initform");
             initForm.submit(function(event) {
                 var age = $("#age").val();
                 var gender = $("#gender").val();
+                var mainSymptom = symptoms.indexOf($("#tags").val());
                 $.ajax({
                     type: initForm.attr('method'),
                     url: initForm.attr('action'),
-                    data: 'age=' + age + '&gender=' + gender
+                    data: 'age=' + age + '&gender=' + gender + '&mainsymptom=' + mainSymptom,
+                    success : function(text)
+                    {
+                        var obj = JSON.parse(text); 
+                        var symptomIndex = obj.symptom;
+                        $("#symptomid").attr("value", symptomIndex);
+                        $("#symptom").html(symptoms[symptomIndex])
+                    }
                 }).done(function() {
                     $("#results").html('Age set as ' + age + ' and gender set as ' +
                         gender + '.').attr('class', 'alert alert-success');
@@ -42,12 +55,12 @@ $(document).ready(function() {
                 event.preventDefault();
             });
 
-            var confirmForm = $("#confirmform");
-            confirmForm.submit(function(event) {
-                var answer = "true";
+            // CONFIRM
+            function confirmCallAction(action) {
+                var answer = action;
                 $.ajax({
-                    type: confirmForm.attr('method'),
-                    url: confirmForm.attr('action'),
+                    type: "post",
+                    url: "/confirm",
                     data: 'answer=' + answer
                 }).done(function() {
                     $("#results").html('Thank you.').attr('class', 'alert alert-success');
@@ -55,32 +68,48 @@ $(document).ready(function() {
                 }).fail(function() {
                     $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
                 });
-                event.preventDefault();
+            };
+
+            $("#confirm-true").on('click', function(e) {
+                confirmCallAction("true");
             });
 
-            var questionForm = $("#questionform");
-            questionForm.submit(function(event) {
-                var answer = "true";
+            $("#confirm-false").on('click', function(e) {
+                confirmCallAction("false");
+            });
+
+            // QUESTION
+            function questionCallAction(action) {
+                var answer = action;
                 var symptom = $("#symptomid").val();
                 $.ajax({
-                    type: questionForm.attr('method'),
-                    url: questionForm.attr('action'),
+                    type: "post",
+                    url: "/answer",
                     data: 'answer=' + answer + '&symptom=' + symptom,
                     success : function(text)
                     {
                         var obj = JSON.parse(text); 
-                        $("#symptomid").attr("value", obj.symptom);
+                        var symptomIndex = obj.symptom;
+                        $("#symptomid").attr("value", symptomIndex);
+                        $("#symptom").html(symptoms[symptomIndex])
                     }
                 }).done(function() {
-                    $("#results").html('Symptom number ' + symptom + ' confirmed.').attr('class', 'alert alert-success');
+                    $("#results").html('Symptom number ' + symptom + ' marked as ' + answer + '.').attr('class', 'alert alert-success');
                     $("#confirm").hide();
                 }).fail(function() {
                     $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
                 });
-                event.preventDefault();
+            };
+
+            $("#question-true").on('click', function(e) {
+                questionCallAction("true");
             });
 
+            $("#question-false").on("click", function(e) {
+                questionCallAction("false");
+            });
 
+            // DONE
             var doneBtn = $("#done-button");
             doneBtn.click(function(event) {
                 $.ajax({

@@ -7,8 +7,10 @@ package is.pedro;
 import static spark.Spark.*;
 import spark.servlet.SparkApplication;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.InputMismatchException;
 
 public class WebUI implements SparkApplication {
 
@@ -31,8 +33,10 @@ public class WebUI implements SparkApplication {
         post("/initinfo", (request, response) -> {
             currentCase.setAge(Integer.parseInt(request.queryParams("age")));
             currentCase.setGender(request.queryParams("gender").charAt(0));
+            currentCase.addToHas(Integer.parseInt(request.queryParams("mainsymptom")));
             response.status(200);
-            return response;
+            String nextIndex = "9";
+            return "{ \"symptom\":\""+ nextIndex +"\" }";
         });
 
         post("/answer", (request, response) -> {
@@ -74,7 +78,17 @@ public class WebUI implements SparkApplication {
         });
 
         get("/symptoms", (request, response) -> {
-           return response;
+            ArrayList<String> symptoms = repo.getSymptoms();
+            StringBuilder arr = new StringBuilder("{ \"symptoms\": [");
+            for (int i = 0; i < symptoms.size(); i++) {
+                if (i != symptoms.size() - 1) {
+                    arr.append("\"" + symptoms.get(i) + "\", ");
+                }
+                else {
+                    arr.append("\"" + symptoms.get(i) + "\" ] }");
+                }
+            }
+            return arr.toString();
         });
 
     }

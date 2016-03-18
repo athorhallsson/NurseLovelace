@@ -43,11 +43,11 @@
             <h2>Think carefully.</h2>
             <p>Do you have the following symptom?</p>
             <p id="symptom">Symptom<p>
-            <form id="questionform" method="post" action="/answer" class="form-inline" role="form">
+            <div>
                 <input id="symptomid" type="hidden" value="0" />
-                <button type="submit" value="true" class="true">Yes</button>
-                <button type="submit" value="false" class="false">No</button>
-            </form>
+                <button id="question-true">Yes</button>
+                <button id="question-false">No</button>
+            </div>
             <hr>
             <button id="done-button">Done</button>
         </div>
@@ -56,10 +56,10 @@
             <h2>We think it's</h2>
             <p id="diagnosis">A disease</p>
             <p>Is that correct?<p>
-            <form id="confirmform" method="post" action="/confirm" class="form-inline" role="form">
-                <button type="submit" class="true">Yes</button>
-                <button type="submit" class="false">No</button>
-            </form>
+            <div>
+                <button id="confirm-true">Yes</button>
+                <button id="confirm-false">No</button>
+            </div>
         </div>
 
         <div class="container">
