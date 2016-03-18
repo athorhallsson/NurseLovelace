@@ -26,6 +26,8 @@ public class WebUI implements SparkApplication {
         final CBR cbr = new CBR(pCases);
         Case currentCase = new Case(new HashSet<Integer>(), new HashSet<Integer>(), 9, 'M', "Bla");
 
+        // POST
+
         post("/initinfo", (request, response) -> {
             currentCase.setAge(Integer.parseInt(request.queryParams("age")));
             currentCase.setGender(request.queryParams("gender").charAt(0));
@@ -49,24 +51,30 @@ public class WebUI implements SparkApplication {
             return "{ \"symptom\":\""+ newSymptomId +"\" }";
         });
 
-        post("/confirm", (req, res) -> {
-            if (req.queryParams("answer").equals("true")) {
+        post("/confirm", (request, response) -> {
+            if (request.queryParams("answer").equals("true")) {
                 repo.addCase(currentCase);
             }
-            res.status(200);
-            return res;
+            response.status(200);
+            return response;
         });
 
-        get("/question", (req, res) -> {
-            res.status(200);
-            return res;
+        // GET
+
+        get("/question", (request, response) -> {
+            response.status(200);
+            return response;
         });
 
-        get("/done", (req, res) -> {
+        get("/done", (request, response) -> {
             //String diagnosis = cbr.findDiagnosis(currentCase);
             String diagnosis = "Fake diagnosis";
-            res.status(200);
+            response.status(200);
             return "{ \"diagnosis\":\""+ diagnosis +"\" }";
+        });
+
+        get("/symptoms", (request, response) -> {
+           return response;
         });
 
     }

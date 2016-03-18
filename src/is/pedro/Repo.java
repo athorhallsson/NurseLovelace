@@ -106,4 +106,25 @@ public class Repo {
         return cases;
     }
 
+    public ArrayList<String> getSymptoms() {
+        ArrayList<String> symptoms = new ArrayList<String>();
+        Statement s;
+
+        try {
+            s = c.createStatement();
+            ResultSet rs = s.executeQuery( "SELECT * FROM Symptoms s ORDER BY s.sid;");
+            int size = rs.getMetaData().getColumnCount();
+
+            while (rs.next()) {
+                symptoms.add(rs.getString("sname"));
+            }
+            rs.close();
+            s.close();
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.exit(0);
+        }
+        return symptoms;
+    }
+
 }
