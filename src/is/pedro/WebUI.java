@@ -23,33 +23,50 @@ public class WebUI implements SparkApplication {
         final Repo repo = new Repo();
         ArrayList<Case> pCases = repo.getPreviousCases(9, 'M');
         CBR cbr = new CBR(pCases);
+        QuestionSearch qSearch = new QuestionSearch(pCases, repo);
+
         Case currentCase = new Case();
 
         // POST
 
         post("/initinfo", (request, response) -> {
-            currentCase.setAge(Integer.parseInt(request.queryParams("age")));
-            currentCase.setGender(request.queryParams("gender").charAt(0));
-            currentCase.addToHas(Integer.parseInt(request.queryParams("mainsymptom")));
+            int age = Integer.parseInt(request.queryParams("age"));
+            char gender = request.queryParams("gender").charAt(0);
+            int mainSymptom = Integer.parseInt(request.queryParams("mainsymptom"));
+
+            currentCase.setAge(age);
+            currentCase.setGender(gender);
+            currentCase.addToHas(mainSymptom);
+
             response.status(200);
-            String nextIndex = "9";
+
+            qSearch.update(mainSymptom, true);
+            Integer nextIndex = qSearch.nextQuestion();
+
             return "{ \"symptom\":\""+ nextIndex +"\" }";
         });
 
         post("/answer", (request, response) -> {
-            System.out.println(request.queryParams("answer"));
-            System.out.println(request.queryParams("symptom"));
+            Integer symptom = Integer.parseInt(request.queryParams("symptom"));
+            String answer = request.queryParams("answer");
+            boolean hasSymptom = answer.equals("true");
 
-            if (request.queryParams("answer").equals("true")) {
-                currentCase.addToHas(Integer.parseInt(request.queryParams("symptom")));
+            System.out.println(answer);
+            System.out.println(symptom);
+
+            if (hasSymptom) {
+                currentCase.addToHas(symptom);
             }
             else {
-                currentCase.addToHasNot(Integer.parseInt(request.queryParams("symptom")));
+                currentCase.addToHasNot(symptom);
             }
 
-            Integer newSymptomId = Integer.parseInt(request.queryParams("symptom")) + 1;
             response.status(200);
-            return "{ \"symptom\":\""+ newSymptomId +"\" }";
+
+            qSearch.update(symptom, hasSymptom);
+            Integer nextIndex = qSearch.nextQuestion();
+
+            return "{ \"symptom\":\""+ nextIndex +"\" }";
         });
 
         post("/confirm", (request, response) -> {

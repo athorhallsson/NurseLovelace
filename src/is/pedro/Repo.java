@@ -22,6 +22,8 @@ public class Repo {
         symptoms = this.getSymptoms();
     }
 
+    public int numberOfSymptoms() { return symptoms.size(); }
+
     private void connectToDb() {
         try {
             Class.forName("org.postgresql.Driver");
@@ -42,9 +44,12 @@ public class Repo {
             s = c.createStatement();
             StringBuilder query = new StringBuilder("INSERT INTO Cases (");
             query.append("diagnosisId, age, gender, ");
-            for (Integer sx : newCase.hasSx) {
+            for (Iterator<Integer> i = newCase.hasSx.iterator(); i.hasNext();) {
+                Integer sx = i.next();
                 query.append(symptoms.get(sx).replace(' ', '_'));
-                query.append(", ");
+                if (i.hasNext() || newCase.hasNotSx.size() != 0) {
+                    query.append(", ");
+                }
             }
             for (Iterator<Integer> i = newCase.hasNotSx.iterator(); i.hasNext();) {
                 Integer notSx = i.next();
@@ -52,10 +57,8 @@ public class Repo {
                 if (i.hasNext()) {
                     query.append(", ");
                 }
-                else {
-                    query.append(") VALUES (");
-                }
             }
+            query.append(") VALUES (");
 
             s2 = c.createStatement();
             String bla = "SELECT d.dId FROM Diagnosis d WHERE d.dname='" + newCase.diagnosis + "';";
@@ -87,10 +90,8 @@ public class Repo {
                 if (i != newCase.hasNotSx.size() - 1) {
                     query.append(", ");
                 }
-                else {
-                    query.append(");");
-                }
             }
+            query.append(");");
             System.out.println(query.toString());
             s.executeUpdate(query.toString());
             s.close();
@@ -107,7 +108,7 @@ public class Repo {
 
         try {
             s = c.createStatement();
-            //ResultSet rs = s.executeQuery( "SELECT * FROM Cases c WHERE c.age = " + age + " AND c.gender = " + gender + ";");
+            //ResultSet rs = s.exe4cuteQuery( "SELECT * FROM Cases c WHERE c.age = " + age + " AND c.gender = " + gender + ";");
             ResultSet rs = s.executeQuery( "SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did;");
 
             // Account for the two joined diagnosis columns
@@ -129,6 +130,42 @@ public class Repo {
                     }
                 }
                 cases.add(new Case(hasSx, hasNotSx, rs.getInt("age"), rs.getString("gender").charAt(0), rs.getString("dname")));
+            }
+            rs.close();
+            s.close();
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.exit(0);
+        }
+        return cases;
+    }
+
+    public ArrayList<Case> getCasesWithSymtom(int symptom, boolean value) {
+        ArrayList<Case> cases = new ArrayList<Case>();
+        Statement s;
+
+        try {
+            s = c.createStatement();
+            ResultSet rs = s.executeQuery( "SELECT * FROM Cases c WHERE " + symptoms.get(symptom).replace(' ', '_') + "=" + value + ";");
+
+            int size = rs.getMetaData().getColumnCount();
+
+            while (rs.next()) {
+                HashSet<Integer> hasSx = new HashSet<Integer>();
+                HashSet<Integer> hasNotSx = new HashSet<Integer>();
+
+                // Account for cid, did, age and gender columns
+                for (int i = 5; i <= size; i++) {
+                    Boolean bool = rs.getBoolean(i);
+                    if (!rs.wasNull()) {
+                        if (bool) {
+                            hasSx.add(i);
+                        } else {
+                            hasNotSx.add(i);
+                        }
+                    }
+                }
+                cases.add(new Case(hasSx, hasNotSx, rs.getInt("age"), rs.getString("gender").charAt(0), "diagnosis"));
             }
             rs.close();
             s.close();
