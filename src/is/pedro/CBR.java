@@ -19,7 +19,7 @@ public class CBR {
         int smallestDifference = Integer.MAX_VALUE;
 
         for (Case oldCase : prevCases) {
-            int difference = compareCases(oldCase, c);
+            int difference = compareCases(c, oldCase);
 
             if (difference < smallestDifference) {
                 closestMatch = oldCase;
@@ -32,11 +32,22 @@ public class CBR {
 
     private int compareCases(Case c1, Case c2) {
         int difference = 0;
-     /*   for (int i = 0; i < c1.symptoms.length; i++) {
-            if (c1.symptoms[i] != c2.symptoms[i]) {
+        for (Integer sx : c1.hasSx) {
+            if (c2.hasNotSx.contains(sx)) {
+                difference += 5;
+            }
+            else if (!c2.hasSx.contains(sx)) {
                 difference += 1;
             }
-        }*/
+        }
+        for (Integer sx : c1.hasNotSx) {
+            if (c2.hasSx.contains(sx)) {
+                difference += 5;
+            }
+            else if (!c2.hasNotSx.contains(sx)) {
+                difference += 1;
+            }
+        }
         return difference;
     }
 }

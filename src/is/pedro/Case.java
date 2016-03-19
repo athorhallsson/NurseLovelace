@@ -13,6 +13,8 @@ public class Case {
     char gender;
     String diagnosis = "";
 
+    public Case() {}
+
     public Case(HashSet<Integer> hasSx, HashSet<Integer> hasNotSx, int age, char gender, String diagnosis) {
         this.hasSx = hasSx;
         this.hasNotSx = hasNotSx;

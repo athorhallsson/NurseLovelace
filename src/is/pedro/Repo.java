@@ -13,10 +13,13 @@ import java.util.Iterator;
  */
 public class Repo {
 
+    private ArrayList<String> symptoms;
+
     private Connection c;
 
     public Repo() {
         connectToDb();
+        symptoms = this.getSymptoms();
     }
 
     private void connectToDb() {
@@ -34,39 +37,62 @@ public class Repo {
 
     public void addCase(Case newCase) {
         Statement s;
+        Statement s2;
         try {
             s = c.createStatement();
-            StringBuilder hasQuery = new StringBuilder("INSERT INTO Cases (");
-            hasQuery.append("diagnosis, age, gender, ");
+            StringBuilder query = new StringBuilder("INSERT INTO Cases (");
+            query.append("diagnosisId, age, gender, ");
             for (Integer sx : newCase.hasSx) {
-                hasQuery.append(sx + 4 + ", ");
+                query.append(symptoms.get(sx).replace(' ', '_'));
+                query.append(", ");
             }
             for (Iterator<Integer> i = newCase.hasNotSx.iterator(); i.hasNext();) {
                 Integer notSx = i.next();
-                hasQuery.append(notSx + 4);
+                query.append(symptoms.get(notSx).replace(' ', '_'));
                 if (i.hasNext()) {
-                    hasQuery.append(", ");
+                    query.append(", ");
                 }
                 else {
-                    hasQuery.append(") VALUES (");
+                    query.append(") VALUES (");
                 }
             }
-            hasQuery.append(newCase.diagnosis + ", ");
-            hasQuery.append(newCase.age + ", ");
-            hasQuery.append(newCase.gender + ", ");
-            for (Integer sx : newCase.hasSx) {
-                hasQuery.append("true, ");
+
+            s2 = c.createStatement();
+            String bla = "SELECT d.dId FROM Diagnosis d WHERE d.dname='" + newCase.diagnosis + "';";
+            System.out.println(bla);
+            ResultSet rs2 = s2.executeQuery(bla);
+
+            if (rs2.next()) {
+                query.append(rs2.getInt("dId"));
+            }
+            query.append(", ");
+            query.append(newCase.age);
+            query.append(", '");
+            query.append(newCase.gender);
+            query.append("', ");
+
+            for (int i = 0; i < newCase.hasSx.size(); i++) {
+                query.append("true");
+                if (i == newCase.hasSx.size() - 1) {
+                    if (newCase.hasNotSx.size() != 0) {
+                        query.append(", ");
+                    }
+                }
+                else {
+                    query.append(", ");
+                }
             }
             for (int i = 0; i < newCase.hasNotSx.size(); i++) {
-                hasQuery.append("false");
-                if (i != newCase.hasNotSx.size()) {
-                    hasQuery.append(", ");
+                query.append("false");
+                if (i != newCase.hasNotSx.size() - 1) {
+                    query.append(", ");
                 }
                 else {
-                    hasQuery.append(");");
+                    query.append(");");
                 }
             }
-            s.executeUpdate(hasQuery.toString());
+            System.out.println(query.toString());
+            s.executeUpdate(query.toString());
             s.close();
         } catch (Exception e) {
             System.err.println( e.getClass().getName()+": "+ e.getMessage() );

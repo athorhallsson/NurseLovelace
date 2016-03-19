@@ -7,10 +7,7 @@ package is.pedro;
 import static spark.Spark.*;
 import spark.servlet.SparkApplication;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.InputMismatchException;
 
 public class WebUI implements SparkApplication {
 
@@ -25,8 +22,8 @@ public class WebUI implements SparkApplication {
     public void init() {
         final Repo repo = new Repo();
         ArrayList<Case> pCases = repo.getPreviousCases(9, 'M');
-        final CBR cbr = new CBR(pCases);
-        Case currentCase = new Case(new HashSet<Integer>(), new HashSet<Integer>(), 9, 'M', "Bla");
+        CBR cbr = new CBR(pCases);
+        Case currentCase = new Case();
 
         // POST
 
@@ -71,8 +68,8 @@ public class WebUI implements SparkApplication {
         });
 
         get("/done", (request, response) -> {
-            //String diagnosis = cbr.findDiagnosis(currentCase);
-            String diagnosis = "Fake diagnosis";
+            String diagnosis = cbr.findDiagnosis(currentCase);
+            currentCase.setDiagnosis(diagnosis);
             response.status(200);
             return "{ \"diagnosis\":\""+ diagnosis +"\" }";
         });
