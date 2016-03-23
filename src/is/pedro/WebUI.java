@@ -22,7 +22,7 @@ public class WebUI implements SparkApplication {
     public void init() {
         final Repo repo = new Repo();
         ArrayList<Case> pCases = repo.getPreviousCases(9, 'M');
-        CBR cbr = new CBR(pCases);
+
         QuestionSearch qSearch = new QuestionSearch(pCases, repo);
 
         Case currentCase = new Case();
@@ -41,6 +41,7 @@ public class WebUI implements SparkApplication {
             response.status(200);
 
             qSearch.update(mainSymptom, true);
+            qSearch.setToAsked(mainSymptom);
             Integer nextIndex = qSearch.nextQuestion();
 
             return "{ \"symptom\":\""+ nextIndex +"\" }";
@@ -51,9 +52,6 @@ public class WebUI implements SparkApplication {
             String answer = request.queryParams("answer");
             boolean hasSymptom = answer.equals("true");
 
-            System.out.println(answer);
-            System.out.println(symptom);
-
             if (hasSymptom) {
                 currentCase.addToHas(symptom);
             }
@@ -62,7 +60,6 @@ public class WebUI implements SparkApplication {
             }
 
             response.status(200);
-
             qSearch.update(symptom, hasSymptom);
             Integer nextIndex = qSearch.nextQuestion();
 
@@ -70,7 +67,15 @@ public class WebUI implements SparkApplication {
         });
 
         post("/confirm", (request, response) -> {
-            if (request.queryParams("answer").equals("true")) {
+            String answer = request.queryParams("answer");
+            if (answer == null) {
+                return response;
+            }
+            else if (answer.equals("true")) {
+                repo.addCase(currentCase);
+            }
+            else {
+                currentCase.setDiagnosis(answer);
                 repo.addCase(currentCase);
             }
             response.status(200);
@@ -79,12 +84,8 @@ public class WebUI implements SparkApplication {
 
         // GET
 
-        get("/question", (request, response) -> {
-            response.status(200);
-            return response;
-        });
-
         get("/done", (request, response) -> {
+            CBR cbr = new CBR(pCases);
             String diagnosis = cbr.findDiagnosis(currentCase);
             currentCase.setDiagnosis(diagnosis);
             response.status(200);

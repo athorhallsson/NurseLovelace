@@ -53,4 +53,17 @@ public class QuestionSearch {
             }
         }
     }
+
+    public void setToAsked(int question) {
+        questionArray.get(question).asked = true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (QuestionNode qn : questionArray) {
+            sb.append(qn.toString() + "\n");
+        }
+        return sb.toString();
+    }
 }

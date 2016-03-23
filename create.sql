@@ -35,7 +35,7 @@ CREATE TABLE Cases (
 	rhinitis boolean,
 	nausea boolean,
 	rhinorrhea boolean,
-	sense_incomplete_bladder_emptying boolean,
+	sense_of_incomplete_bladder_emptying boolean,
 	dyspnea boolean,
 	smelly_urine boolean,
 	sneezing boolean,

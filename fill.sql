@@ -61,7 +61,7 @@ INSERT INTO Cases (diagnosisId, age, gender, cough, pain, fever, chills, dyspnea
 	VALUES (2, 80, 'f', true, true, true, true, true, true, true, true, true, true, true, true, true);
 INSERT INTO Cases (diagnosisId, age, gender, pain, urinary_frequency, dysuria, cloudy_urine, hematuria, smelly_urine, fatigue, fever, malaise, nausea, voimting, hypotension, tachycardia)
 	VALUES (3, 35, 'f', true, true, true, true, true, true, true, true, true, true, true, true, true);
-INSERT INTO Cases (diagnosisId, age, gender, pain, urinary_frequency, dysuria, cloudy_urine, hematuria, smelly_urine, sense_incomplete_bladder_emptying, fever)
+INSERT INTO Cases (diagnosisId, age, gender, pain, urinary_frequency, dysuria, cloudy_urine, hematuria, smelly_urine, sense_of_incomplete_bladder_emptying, fever)
 	VALUES (4, 42, 'f', true, true, true, true, true, true, true, true);
 INSERT INTO Cases (diagnosisId, age, gender, pain, cough, chills, fever, fatigue, malaise, dehydration, sweating, rhinitis, rhinorrhea, sneezing, dyspnea, pharingitis, conjunctivitis)
 	VALUES (5, 3, 'm', true, true, true, true, true, true, true, true, true, true, true, true, true, true);

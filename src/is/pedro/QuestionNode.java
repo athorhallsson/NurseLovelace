@@ -11,4 +11,9 @@ public class QuestionNode {
     public QuestionNode(Integer symptom) {
         this.number = symptom;
     }
+
+    @Override
+    public String toString() {
+        return "S: " + this.number + " R: " + this.rating + " A: " + this.asked;
+    }
 }

@@ -20,6 +20,9 @@ public class Repo {
     public Repo() {
         connectToDb();
         symptoms = this.getSymptoms();
+        for (String sName : symptoms) {
+            sName.replace(' ', '_');
+        }
     }
 
     public int numberOfSymptoms() { return symptoms.size(); }
@@ -46,14 +49,14 @@ public class Repo {
             query.append("diagnosisId, age, gender, ");
             for (Iterator<Integer> i = newCase.hasSx.iterator(); i.hasNext();) {
                 Integer sx = i.next();
-                query.append(symptoms.get(sx).replace(' ', '_'));
+                query.append(symptoms.get(sx));
                 if (i.hasNext() || newCase.hasNotSx.size() != 0) {
                     query.append(", ");
                 }
             }
             for (Iterator<Integer> i = newCase.hasNotSx.iterator(); i.hasNext();) {
                 Integer notSx = i.next();
-                query.append(symptoms.get(notSx).replace(' ', '_'));
+                query.append(symptoms.get(notSx));
                 if (i.hasNext()) {
                     query.append(", ");
                 }
@@ -103,15 +106,23 @@ public class Repo {
     }
 
     public ArrayList<Case> getPreviousCases(int age, char gender) {
+        //ResultSet rs = s.executeQuery( "SELECT * FROM Cases c WHERE c.age = " + age + " AND c.gender = " + gender + ";");
+        return getFromCases("SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did;");
+
+    }
+
+    public ArrayList<Case> getCasesWithSymtom(int symptom, boolean value) {
+        return getFromCases("SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did WHERE " + symptoms.get(symptom) + "=" + value + ";");
+    }
+
+    private ArrayList<Case> getFromCases(String query) {
         ArrayList<Case> cases = new ArrayList<Case>();
         Statement s;
-
         try {
             s = c.createStatement();
-            //ResultSet rs = s.exe4cuteQuery( "SELECT * FROM Cases c WHERE c.age = " + age + " AND c.gender = " + gender + ";");
-            ResultSet rs = s.executeQuery( "SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did;");
+            ResultSet rs = s.executeQuery(query);
 
-            // Account for the two joined diagnosis columns
+            // Minus 2 to skip the did and the dname
             int size = rs.getMetaData().getColumnCount() - 2;
 
             while (rs.next()) {
@@ -123,9 +134,9 @@ public class Repo {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
-                            hasSx.add(i);
+                            hasSx.add(i - 5);
                         } else {
-                            hasNotSx.add(i);
+                            hasNotSx.add(i - 5);
                         }
                     }
                 }
@@ -134,43 +145,7 @@ public class Repo {
             rs.close();
             s.close();
         } catch (Exception e) {
-            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-            System.exit(0);
-        }
-        return cases;
-    }
-
-    public ArrayList<Case> getCasesWithSymtom(int symptom, boolean value) {
-        ArrayList<Case> cases = new ArrayList<Case>();
-        Statement s;
-
-        try {
-            s = c.createStatement();
-            ResultSet rs = s.executeQuery( "SELECT * FROM Cases c WHERE " + symptoms.get(symptom).replace(' ', '_') + "=" + value + ";");
-
-            int size = rs.getMetaData().getColumnCount();
-
-            while (rs.next()) {
-                HashSet<Integer> hasSx = new HashSet<Integer>();
-                HashSet<Integer> hasNotSx = new HashSet<Integer>();
-
-                // Account for cid, did, age and gender columns
-                for (int i = 5; i <= size; i++) {
-                    Boolean bool = rs.getBoolean(i);
-                    if (!rs.wasNull()) {
-                        if (bool) {
-                            hasSx.add(i);
-                        } else {
-                            hasNotSx.add(i);
-                        }
-                    }
-                }
-                cases.add(new Case(hasSx, hasNotSx, rs.getInt("age"), rs.getString("gender").charAt(0), "diagnosis"));
-            }
-            rs.close();
-            s.close();
-        } catch (Exception e) {
-            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.err.println(e.getClass().getName()+": "+ e.getMessage());
             System.exit(0);
         }
         return cases;
