@@ -13,15 +13,15 @@ import java.util.Iterator;
  */
 public class Repo {
 
-    private ArrayList<String> symptoms;
+    private ArrayList<String> symptoms = new ArrayList<String>();
 
     private Connection c;
 
     public Repo() {
         connectToDb();
-        symptoms = this.getSymptoms();
-        for (String sName : symptoms) {
-            sName.replace(' ', '_');
+        ArrayList<String> tempSymptoms = this.getSymptoms();
+        for (int i = 0; i < tempSymptoms.size(); i++) {
+            symptoms.add(tempSymptoms.get(i).replace(' ', '_'));
         }
     }
 
@@ -64,12 +64,21 @@ public class Repo {
             query.append(") VALUES (");
 
             s2 = c.createStatement();
-            String bla = "SELECT d.dId FROM Diagnosis d WHERE d.dname='" + newCase.diagnosis + "';";
-            System.out.println(bla);
-            ResultSet rs2 = s2.executeQuery(bla);
+            String diagnosisQuery = "SELECT d.dId FROM Diagnosis d WHERE d.dname='" + newCase.diagnosis + "';";
+            System.out.println(diagnosisQuery);
 
+            ResultSet rs2 = s2.executeQuery(diagnosisQuery);
+            // Check if there is an existing diagnosis
             if (rs2.next()) {
-                query.append(rs2.getInt("dId"));
+                int did = rs2.getInt("dId");
+                query.append(did);
+            }
+            else {
+                s2.executeUpdate("INSERT INTO Diagnosis (dname) VALUES ('" + newCase.diagnosis + "');");
+                rs2 = s2.executeQuery(diagnosisQuery);
+                rs2.next();
+                int did = rs2.getInt("dId");
+                query.append(did);
             }
             query.append(", ");
             query.append(newCase.age);
