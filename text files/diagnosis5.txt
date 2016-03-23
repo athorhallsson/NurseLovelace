@@ -1,0 +1,14 @@
+Heart attack: 
+pain, nausea, voimiting, dizziness, fatigue, presyncope, syncope, clammy skin, cold sweat, sweating, dyspepsia, anxiety, arrythmia, dyspnea.
+
+Pneumonia: 
+cough, pain, fever, chills, dyspnea, tachypnea, wheezing, tachycardia, dehydration, fatigue, malaise, clammy skin, sweating.
+
+Urinary tract infection (upper): 
+pain, urinary frequency, dysuria, cloudy urine, hematuria, smelly urine, fatigue, fever, malaise, nausea, voimting, hypotension, tachycardia.
+
+Urinary tract infection (lower): 
+pain, urinary frequency, dysuria, cloudy urine, hematuria, smelly urine, sense of incomplete bladder emptying, fever.
+
+Acute upper respiratory tract infection: 
+pain, cough, chills, fever, fatigue, malaise, dehydration, sweating, rhinitis, rhinorrhea, sneezing, dyspnea, pharingitis, conjunctivitis.
