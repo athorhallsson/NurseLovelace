@@ -1,6 +1,7 @@
 $(document).ready(function() {
             $("#question").hide();
             $("#confirm").hide();
+            $("#correct-diagnosis").hide();
 
             var symptoms;
             // Autocomplete symptoms
@@ -75,7 +76,14 @@ $(document).ready(function() {
             });
 
             $("#confirm-false").on('click', function(e) {
-                confirmCallAction("false");
+                $("#confirm").hide();
+                $("#correct-diagnosis").show();
+            });
+
+            $("#correct-diagnosis-btn").on('click', function(e) {
+                var newDiagnosis = $("#correct-diagnosis-text").val();
+                confirmCallAction(newDiagnosis);
+                $("#correct-diagnosis").hide();
             });
 
             // QUESTION
