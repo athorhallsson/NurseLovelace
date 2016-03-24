@@ -7,17 +7,23 @@ import java.util.InputMismatchException;
  * Created by andri on 13/03/16.
  */
 public class Case {
-    HashSet<Integer> hasSx = new HashSet<>();
-    HashSet<Integer> hasNotSx = new HashSet<>();
+    // Use major if dealing with current case
+    HashSet<Integer> hasMajorSx = new HashSet<>();
+    HashSet<Integer> hasNotMajorSx = new HashSet<>();
+    HashSet<Integer> hasNotMinorSx = new HashSet<>();
+    HashSet<Integer> hasMinorSx = new HashSet<>();
+
     int age;
     char gender;
     String diagnosis = "";
 
     public Case() {}
 
-    public Case(HashSet<Integer> hasSx, HashSet<Integer> hasNotSx, int age, char gender, String diagnosis) {
-        this.hasSx = hasSx;
-        this.hasNotSx = hasNotSx;
+    public Case(HashSet<Integer> hasMajorSx, HashSet<Integer> hasNotMajorSx, HashSet<Integer> hasMinorSx, HashSet<Integer> hasNotMinorSx, int age, char gender, String diagnosis) {
+        this.hasMajorSx = hasMajorSx;
+        this.hasNotMajorSx = hasNotMajorSx;
+        this.hasMinorSx = hasMinorSx;
+        this.hasNotMinorSx = hasNotMinorSx;
         this.age = age;
         this.gender = gender;
         this.diagnosis = diagnosis;
@@ -31,15 +37,15 @@ public class Case {
 
     public void setGender(Character gender) { this.gender = gender; }
 
-    public void addToHas(Integer symptom) { hasSx.add(symptom); }
+    public void addToHas(Integer symptom) { hasMajorSx.add(symptom); }
 
-    public void addToHasNot (Integer symptom) { hasNotSx.add(symptom); }
+    public void addToHasNot (Integer symptom) { hasNotMajorSx.add(symptom); }
 
     @Override
     public String toString() {
         StringBuilder stb = new StringBuilder();
         stb.append(this.age + " " + this.gender + " ");
-        for(Integer sx : hasSx) {
+        for(Integer sx : hasMajorSx) {
             stb.append(sx + " ");
         }
         stb.append(diagnosis);

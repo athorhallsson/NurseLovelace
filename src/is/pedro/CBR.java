@@ -32,19 +32,19 @@ public class CBR {
 
     private int compareCases(Case c1, Case c2) {
         int difference = 0;
-        for (Integer sx : c1.hasSx) {
-            if (c2.hasNotSx.contains(sx)) {
+        for (Integer sx : c1.hasMajorSx) {
+            if (c2.hasNotMajorSx.contains(sx)) {
                 difference += 5;
             }
-            else if (!c2.hasSx.contains(sx)) {
+            else if (!c2.hasMajorSx.contains(sx)) {
                 difference += 1;
             }
         }
-        for (Integer sx : c1.hasNotSx) {
-            if (c2.hasSx.contains(sx)) {
+        for (Integer sx : c1.hasNotMajorSx) {
+            if (c2.hasMajorSx.contains(sx)) {
                 difference += 5;
             }
-            else if (!c2.hasNotSx.contains(sx)) {
+            else if (!c2.hasNotMajorSx.contains(sx)) {
                 difference += 1;
             }
         }
