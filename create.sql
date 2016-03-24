@@ -1,4 +1,4 @@
-﻿DROP TABLE IF EXISTS Cases, Diagnosis, Symptoms;
+﻿DROP TABLE IF EXISTS Cases, Diagnosis, SymptomNames, Symptoms, Positions, Pain;
 
 CREATE TABLE Diagnosis (
 	dId serial,
@@ -6,12 +6,90 @@ CREATE TABLE Diagnosis (
 	PRIMARY KEY (dId)
 );
 
-CREATE TABLE Cases (
-	caseId serial,
-	diagnosisId integer,
-	age integer NOT NULL,
-	gender char NOT NULL, 
-	pain boolean, 
+CREATE TABLE Positions (
+	posId serial,
+	head boolean,
+	temporal boolean,
+	occipital boolean,
+	frontal boolean,
+	neck boolean,
+	chest boolean,
+	right_chest boolean,
+	left_chest boolean,
+	right_shoulder boolean,
+	left_shoulder boolean,
+	right_shoulder_blade boolean,
+	left_shoulder_blade boolean,
+	right_arm boolean,
+	left_arm boolean,
+	abdomen boolean,
+	epigastrial boolean,
+	right_upper_quadrant boolean,
+	left_upper_quadrant boolean,
+	right_lower_quadrant boolean,
+	left_lower_quadrant boolean,
+	right_flank boolean,
+	left_flank boolean,
+	suprapubic boolean,
+	thorical_spine boolean,
+	lumbar_spine boolean,
+	right_costovertebral boolean,
+	left_costovertebral boolean,
+	pelvic boolean,
+	right_groin boolean,
+	left_groin boolean,
+	right_buttock boolean,
+	left_buttock boolean,
+	anal boolean,
+	testicular boolean,
+	vaginal boolean,
+	right_thigh boolean,
+	left_thigh boolean,
+	right_knee boolean,
+	left_knee boolean,
+	right_kalf boolean,
+	left_kalf boolean,
+	right_foot boolean,
+	left_foot boolean,
+	PRIMARY KEY (posId)
+);
+
+CREATE TABLE Pain (
+	pId serial, 
+	positionId integer NOT NULL,
+	referred_pain_position integer NOT NULL,
+	sharp boolean,
+	burning boolean,
+	clenching boolean,
+	pleuritic boolean,
+	colicky boolean,
+	constant boolean,
+	on_rest boolean,
+	on_exertion boolean,
+	dysuria boolean,
+	dysparenunia boolean,
+	four_hours boolean,
+	eight_hours boolean,
+	one_day boolean,
+	two_day boolean,
+	one_week boolean,
+	one_month boolean,
+	six_months boolean,
+	better_with_rest boolean,
+	better_with_lying_still boolean,
+	better_with_moving_around boolean,
+	better_with_painkillers boolean,
+	worse_with_breathing boolean,
+	worse_with_eating boolean,
+	worse_with_moving_around boolean,
+	FOREIGN KEY (positionId) REFERENCES Positions (posId),
+	FOREIGN KEY (referred_pain_position) REFERENCES Positions (posId),
+	PRIMARY KEY (pId)
+);
+
+CREATE TABLE Symptoms (
+	sxId serial,
+	pain integer NOT NULL, 
 	anxiety boolean,
 	arrythmia boolean,
 	chills boolean,
@@ -61,11 +139,24 @@ CREATE TABLE Cases (
 	akinesia boolean,
 	alexia boolean,
 	chorea boolean, 
+	FOREIGN KEY (pain) REFERENCES Pain (pId),
+	PRIMARY KEY (sxId)
+);
+
+CREATE TABLE Cases (
+	caseId serial,
+	diagnosisId integer,
+	age integer NOT NULL,
+	gender char NOT NULL, 
+	majorSx integer NOT NULL,
+	minorSx integer NOT NULL, 
 	FOREIGN KEY (diagnosisId) REFERENCES Diagnosis (dId),
+	FOREIGN KEY (majorSx) REFERENCES Symptoms (sxId),
+	FOREIGN KEY (minorSx) REFERENCES Symptoms (sxId),
 	PRIMARY KEY (caseId)
 );
 
-CREATE TABLE Symptoms (
+CREATE TABLE SymptomNames (
 	sId serial,
 	sName varchar(100) NOT NULL,
 	PRIMARY KEY (sId)
