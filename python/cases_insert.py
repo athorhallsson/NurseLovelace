@@ -10,7 +10,7 @@ random.seed("this is a seed")
 errorRate = 10
 
 # Disease names
-diseases = ["appendicitis"]
+diseases = ["appendicitis", "appendicitis"]
 
 # Create the output script
 f_new = open("../sql/fill_all" + ".sql", "w")
@@ -26,7 +26,7 @@ for i in range(len(diseases)):
     # Make age list
     ages = []
     min = 0
-    for n in range(6, 26):
+    for n in range(6, 27):
         for c in range(int(lines[n])):
             ages.append(random.randint(min + 1, min + 5))
         min += 5
@@ -37,7 +37,7 @@ for i in range(len(diseases)):
     f_new.write(diagnosisQuery)
     
     
-    for j in range (1, 100):
+    for j in range (1, 101):
         id = 100 * i + j
         
         # Position
