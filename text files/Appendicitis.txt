@@ -1,5 +1,8 @@
 Appendicitis
-pain fever nausea loss_of_appatite
+epigastrial right_lower_quadrant periumbilical
+right_lower_quadrant right_groin
+constant four_hours eigth_hours one_day two_days better_with_lying_still worse_with_eating worse_with_moving_around
+fever nausea loss_of_appatite
 vomiting diarrhea chills malaise abdominal_distension dysuria
 5
 15
@@ -22,4 +25,3 @@ vomiting diarrhea chills malaise abdominal_distension dysuria
 0
 0
 52
-48
