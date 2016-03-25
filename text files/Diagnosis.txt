@@ -1,4 +1,4 @@
-Heart attack: Pain - position(chest, jaw, left arm, left shouldur blade) - type(burning, clenching) - circumstance(rest, exertion) - duration(<4hrs, <24hrs, <48hrs, <1w), nausea, voimiting, dizziness, fatigue, lightheadedness, clammy skin, cold sweat, sweating, indigestion, anxiety, feeling of impending doom, arrythmia, shortness of breath, increases with age(??? >40, >50, >60, >70, >80)
+
 
 Pneumonia: cough - production(phlegm, pus, blood), pain - position(chest, upper back) - type(sharp, pleuritic) - circumstance(worsens with breathing)  fever, chills, shortness of breath, fast breathing, shallow breathing, wheezing, tachycardia, dehydration, fatigue, loss of appetite, malaise, clammy skin, sweating
 

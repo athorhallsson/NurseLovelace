@@ -1,5 +1,8 @@
 Cholecystitis
-pain nausea vomiting loss_of_appitite
+right_upper_quadrant epigastrium
+right_shoulder_blade
+sharp pleuritic constant four_hours eigth_hours one_day two_days one_week worse_with_breathing worse_with_eating
+nausea vomiting loss_of_appitite
 fever malaise chills bloating jaundice indigestion
 0
 1
@@ -22,4 +25,3 @@ fever malaise chills bloating jaundice indigestion
 1
 0
 30
-70

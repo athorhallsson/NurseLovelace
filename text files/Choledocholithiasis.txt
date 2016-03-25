@@ -1,5 +1,8 @@
 Choledocholithiasis
-pain nausea vomiting loss_of_appitite
+right_upper_quadrant epigastrium
+right_shoulder_blade between_shoulder_blades
+sharp pleuritic constant four_hours eigth_hours one_day two_days worse_with_breathing worse_with_eating
+nausea vomiting loss_of_appitite
 fever malaise chills bloating indigestion jaundice light_colored_stools dark_urine
 0
 0
@@ -22,4 +25,3 @@ fever malaise chills bloating indigestion jaundice light_colored_stools dark_uri
 1
 0
 30
-70
