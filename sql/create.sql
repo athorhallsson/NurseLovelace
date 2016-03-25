@@ -92,7 +92,6 @@ CREATE TABLE Pain (
 
 CREATE TABLE Symptoms (
 	sxId serial,
-	pain integer NOT NULL, 
 	anxiety boolean,
 	arrythmia boolean,
 	chills boolean,
@@ -124,8 +123,7 @@ CREATE TABLE Symptoms (
 	sweating boolean,
 	tachycardia boolean,
 	urinary_frequency boolean,
-	voimiting boolean,
-	voimting boolean,
+	vomiting boolean,
 	wheezing boolean,
 	dysphagia boolean,
 	ataxia boolean,
@@ -141,8 +139,10 @@ CREATE TABLE Symptoms (
 	dystonia boolean,
 	akinesia boolean,
 	alexia boolean,
-	chorea boolean, 
-	FOREIGN KEY (pain) REFERENCES Pain (pId),
+	chorea boolean,
+	loss_of_appatite boolean,
+	diarrhea boolean,
+	abdominal_distension boolean,
 	PRIMARY KEY (sxId)
 );
 
@@ -152,10 +152,12 @@ CREATE TABLE Cases (
 	age integer NOT NULL,
 	gender char NOT NULL, 
 	majorSx integer NOT NULL,
-	minorSx integer NOT NULL, 
+	minorSx integer NOT NULL,
+	painId integer NOT NULL, 
 	FOREIGN KEY (diagnosisId) REFERENCES Diagnosis (dId),
 	FOREIGN KEY (majorSx) REFERENCES Symptoms (sxId),
 	FOREIGN KEY (minorSx) REFERENCES Symptoms (sxId),
+	FOREIGN KEY (painId) REFERENCES Pain (pId),
 	PRIMARY KEY (caseId)
 );
 

@@ -22,10 +22,16 @@ public class QuestionSearch {
          }
 
         for (Case c : prevCases) {
-            for (Integer sx : c.hasSx) {
+            for (Integer sx : c.hasMajorSx) {
+                questionArray.get(sx).rating += 2;
+            }
+            for (Integer sx : c.hasNotMajorSx) {
+                questionArray.get(sx).rating += 2;
+            }
+            for (Integer sx : c.hasMinorSx) {
                 questionArray.get(sx).rating++;
             }
-            for (Integer sx : c.hasNotSx) {
+            for (Integer sx : c.hasNotMinorSx) {
                 questionArray.get(sx).rating++;
             }
         }
@@ -45,10 +51,16 @@ public class QuestionSearch {
     public void update(int question, boolean answer) {
         ArrayList<Case> relevantCases = repo.getCasesWithSymtom(question, answer);
         for (Case c : relevantCases) {
-            for (Integer sx : c.hasSx) {
+            for (Integer sx : c.hasMajorSx) {
+                questionArray.get(sx).rating += 2;
+            }
+            for (Integer sx : c.hasNotMajorSx) {
+                questionArray.get(sx).rating += 2;
+            }
+            for (Integer sx : c.hasMinorSx) {
                 questionArray.get(sx).rating++;
             }
-            for (Integer sx : c.hasNotSx) {
+            for (Integer sx : c.hasNotMinorSx) {
                 questionArray.get(sx).rating++;
             }
         }

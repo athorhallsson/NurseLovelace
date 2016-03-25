@@ -47,14 +47,14 @@ public class Repo {
             s = c.createStatement();
             StringBuilder query = new StringBuilder("INSERT INTO Cases (");
             query.append("diagnosisId, age, gender, ");
-            for (Iterator<Integer> i = newCase.hasSx.iterator(); i.hasNext();) {
+            for (Iterator<Integer> i = newCase.hasMajorSx.iterator(); i.hasNext();) {
                 Integer sx = i.next();
                 query.append(symptoms.get(sx));
-                if (i.hasNext() || newCase.hasNotSx.size() != 0) {
+                if (i.hasNext() || newCase.hasNotMajorSx.size() != 0) {
                     query.append(", ");
                 }
             }
-            for (Iterator<Integer> i = newCase.hasNotSx.iterator(); i.hasNext();) {
+            for (Iterator<Integer> i = newCase.hasNotMajorSx.iterator(); i.hasNext();) {
                 Integer notSx = i.next();
                 query.append(symptoms.get(notSx));
                 if (i.hasNext()) {
@@ -86,10 +86,10 @@ public class Repo {
             query.append(newCase.gender);
             query.append("', ");
 
-            for (int i = 0; i < newCase.hasSx.size(); i++) {
+            for (int i = 0; i < newCase.hasMajorSx.size(); i++) {
                 query.append("true");
-                if (i == newCase.hasSx.size() - 1) {
-                    if (newCase.hasNotSx.size() != 0) {
+                if (i == newCase.hasMajorSx.size() - 1) {
+                    if (newCase.hasNotMajorSx.size() != 0) {
                         query.append(", ");
                     }
                 }
@@ -97,9 +97,9 @@ public class Repo {
                     query.append(", ");
                 }
             }
-            for (int i = 0; i < newCase.hasNotSx.size(); i++) {
+            for (int i = 0; i < newCase.hasNotMajorSx.size(); i++) {
                 query.append("false");
-                if (i != newCase.hasNotSx.size() - 1) {
+                if (i != newCase.hasNotMajorSx.size() - 1) {
                     query.append(", ");
                 }
             }
@@ -116,12 +116,16 @@ public class Repo {
 
     public ArrayList<Case> getPreviousCases(int age, char gender) {
         //ResultSet rs = s.executeQuery( "SELECT * FROM Cases c WHERE c.age = " + age + " AND c.gender = " + gender + ";");
-        return getFromCases("SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did;");
-
+        //return getFromCases("SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did;");
+        return getFromCases("SELECT * FROM CASES c JOIN SYMPTOMS major ON c.majorsx = major.sxid JOIN SYMPTOMS minor ON c.minorsx = minor.sxid JOIN Pain p ON p.pId = c.painid JOIN diagnosis d on c.diagnosisId = d.did");
     }
 
     public ArrayList<Case> getCasesWithSymtom(int symptom, boolean value) {
-        return getFromCases("SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did WHERE " + symptoms.get(symptom) + "=" + value + ";");
+        // return getFromCases("SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did WHERE " + symptoms.get(symptom) + "=" + value + ";");
+        String query = "SELECT * FROM CASES c JOIN SYMPTOMS major ON c.majorsx = major.sxid JOIN SYMPTOMS minor ON c.minorsx = minor.sxid JOIN Pain p ON p.pId = c.painid JOIN diagnosis d on c.diagnosisId = d.did ";
+        query += "WHERE major." + symptoms.get(symptom) + "=" + value + " OR minor." + symptoms.get(symptom) + "=" + value;
+        System.out.println(query);
+        return getFromCases(query);
     }
 
     private ArrayList<Case> getFromCases(String query) {
@@ -131,25 +135,52 @@ public class Repo {
             s = c.createStatement();
             ResultSet rs = s.executeQuery(query);
 
-            // Minus 2 to skip the did and the dname
-            int size = rs.getMetaData().getColumnCount() - 2;
+            //int size = rs.getMetaData().getColumnCount() - 2;
 
             while (rs.next()) {
-                HashSet<Integer> hasSx = new HashSet<Integer>();
-                HashSet<Integer> hasNotSx = new HashSet<Integer>();
+                HashSet<Integer> hasMajorSx = new HashSet<Integer>();
+                HashSet<Integer> hasNotMajorSx = new HashSet<Integer>();
 
                 // Account for cid, did, age and gender columns
-                for (int i = 5; i <= size; i++) {
+                for (int i = 9; i <= 59; i++) {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
-                            hasSx.add(i - 5);
+                            hasMajorSx.add(i - 9);
                         } else {
-                            hasNotSx.add(i - 5);
+                            hasNotMajorSx.add(i - 9);
                         }
                     }
                 }
-                cases.add(new Case(hasSx, hasNotSx, rs.getInt("age"), rs.getString("gender").charAt(0), rs.getString("dname")));
+
+                HashSet<Integer> hasMinorSx = new HashSet<Integer>();
+                HashSet<Integer> hasNotMinorSx = new HashSet<Integer>();
+
+                for (int i = 61; i <= 101; i++) {
+                    Boolean bool = rs.getBoolean(i);
+                    if (!rs.wasNull()) {
+                        if (bool) {
+                            hasMinorSx.add(i - 61);
+                        } else {
+                            hasNotMinorSx.add(i - 61);
+                        }
+                    }
+                }
+
+                HashSet<Integer> pain = new HashSet<Integer>();
+
+                for (int i = 105; i <= 130; i++) {
+                    Boolean bool = rs.getBoolean(i);
+                    if (!rs.wasNull()) {
+                        if (bool) {
+                            pain.add(i - 105);
+                        } else {
+                            pain.add(i - 105);
+                        }
+                    }
+                }
+
+                cases.add(new Case(hasMajorSx, hasNotMajorSx, hasMinorSx, hasNotMinorSx, rs.getInt("age"), rs.getString("gender").charAt(0), rs.getString("dname")));
             }
             rs.close();
             s.close();
@@ -163,10 +194,9 @@ public class Repo {
     public ArrayList<String> getSymptoms() {
         ArrayList<String> symptoms = new ArrayList<String>();
         Statement s;
-
         try {
             s = c.createStatement();
-            ResultSet rs = s.executeQuery( "SELECT * FROM Symptoms s ORDER BY s.sid;");
+            ResultSet rs = s.executeQuery("SELECT * FROM SymptomNames s ORDER BY s.sid;");
 
             while (rs.next()) {
                 symptoms.add(rs.getString("sname"));
