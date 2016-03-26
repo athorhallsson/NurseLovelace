@@ -1,0 +1,27 @@
+Pneumonia
+chest right_chest left_chest right_shoulder_blade left_shoulder_blade
+
+sharp pleuritic worse_with_breathing
+cough sputum_production hemoptysis fever shortness_of_breath tachypnea 
+dehydration fatigue loss_of_appetite malaise diaphoresis chills tachycardia
+7
+3
+2
+2
+2
+2
+2
+3
+4
+4
+5
+5
+7
+9
+10
+10
+10
+6
+4
+3
+55

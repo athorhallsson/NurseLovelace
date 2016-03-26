@@ -1,0 +1,27 @@
+Ulcerative colitis
+anal left_lower_quadrant pelvic
+lower_back
+dull four_hours eigth_hours one_day two_days one_week one_month six_months worse_with_eating
+hematochesia melena diarrhea fever
+bloating constipation weight_loss fatigue loss_of_appetite
+0
+0
+1
+2
+3
+4
+5
+5
+7
+10
+10
+10
+10
+10
+8
+8
+4
+2
+1
+0
+60

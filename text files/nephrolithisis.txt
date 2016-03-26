@@ -1,0 +1,27 @@
+nephrolithisis
+left_costovertebral right_costovertebral left_flank right_flank pelvic suprapubic
+left_groin right_groin testicular
+dysuria sharp colicky four_hours eigth_hours one_day two_days one_week
+nausea hematuria
+polyuria sweating voimting
+0
+0
+1
+5
+6
+6
+7
+7
+7
+8
+8
+8
+7
+7
+7
+5
+5
+3
+3
+0
+60
