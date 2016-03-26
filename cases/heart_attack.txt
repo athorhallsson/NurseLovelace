@@ -1,0 +1,27 @@
+Heart attack
+chest left_chest right_chest 
+jaw neck left_shoulder left_shoulder_blade left_arm
+clenching burning on_rest on_exertion four_hours eight_hours one_day better_with_rest worse_with_moving_around
+shortness_of_breath nausea diaphoresis lightheadedness
+vomiting dizziness fatigue indigestion palpitations
+0
+0
+0
+0
+0
+0
+1
+3
+5
+7
+7
+10
+10
+12
+15
+15
+8
+3
+2
+2
+66

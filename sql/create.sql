@@ -30,7 +30,7 @@ CREATE TABLE Positions (
 	right_arm boolean,
 	left_arm boolean,
 	abdomen boolean,
-	epigastrial boolean,
+	epigastrium boolean,
 	periumbilical boolean,
 	right_upper_quadrant boolean,
 	left_upper_quadrant boolean,

@@ -13,6 +13,17 @@ import java.util.Iterator;
  */
 public class Repo {
 
+    private int majorStart = 9;
+    private int majorEnd = 70;
+    private int minorStart = 72;
+    private int minorEnd = 133;
+    private int painStart = 132;
+    private int painEnd = 162;
+    private int posStart = 165;
+    private int posEnd = 215;
+    private int refstart = 217;
+    private int refEnd = 267;
+
     private ArrayList<String> symptoms = new ArrayList<String>();
 
     private Connection c;
@@ -145,14 +156,14 @@ public class Repo {
                 HashSet<Integer> hasNotMajorSx = new HashSet<Integer>();
 
                 // Account for cid, did, age and gender columns
-                for (int i = 9; i <= 59; i++) {
+                for (int i = majorStart; i <= majorEnd; i++) {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
-                            hasMajorSx.add(i - 9);
+                            hasMajorSx.add(i - majorStart);
                         }
                         else {
-                            hasNotMajorSx.add(i - 9);
+                            hasNotMajorSx.add(i - majorStart);
                         }
                     }
                 }
@@ -160,14 +171,14 @@ public class Repo {
                 HashSet<Integer> hasMinorSx = new HashSet<Integer>();
                 HashSet<Integer> hasNotMinorSx = new HashSet<Integer>();
 
-                for (int i = 61; i <= 101; i++) {
+                for (int i = minorStart; i <= minorEnd; i++) {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
-                            hasMinorSx.add(i - 61);
+                            hasMinorSx.add(i - minorStart);
                         }
                         else {
-                            hasNotMinorSx.add(i - 61);
+                            hasNotMinorSx.add(i - minorStart);
                         }
                     }
                 }
@@ -178,17 +189,42 @@ public class Repo {
                 HashSet<Integer> rPosition = new HashSet<Integer>();
 
 
-                for (int i = 105; i <= 130; i++) {
+                for (int i = painStart; i <= painEnd; i++) {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
-                            painInfo.add(i - 105);
+                            painInfo.add(i - painStart);
                         }
                         else {
-                            painInfo.add(i - 105);
+                            painInfo.add(i - painStart);
                         }
                     }
                 }
+
+                for (int i = posStart; i <= posEnd; i++) {
+                    Boolean bool = rs.getBoolean(i);
+                    if (!rs.wasNull()) {
+                        if (bool) {
+                            position.add(i - posStart);
+                        }
+                        else {
+                            position.add(i - posStart);
+                        }
+                    }
+                }
+
+                for (int i = refstart; i <= refEnd; i++) {
+                    Boolean bool = rs.getBoolean(i);
+                    if (!rs.wasNull()) {
+                        if (bool) {
+                            rPosition.add(i - refstart);
+                        }
+                        else {
+                            rPosition.add(i - refstart);
+                        }
+                    }
+                }
+
                 Pain pain = new Pain(painInfo, position, rPosition);
                 cases.add(new Case(hasMajorSx, hasNotMajorSx, hasMinorSx, hasNotMinorSx, pain, rs.getInt("age"), rs.getString("gender").charAt(0), rs.getString("dname")));
             }
