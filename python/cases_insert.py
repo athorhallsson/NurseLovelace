@@ -10,7 +10,7 @@ random.seed("this is a seed")
 errorRate = 10
 
 # Disease names
-diseases = ["appendicitis", "appendicitis"]
+diseases = ["appendicitis", "biliary_colic", "cholecystitis", "choledocholithiasis"]
 
 # Create the output script
 f_new = open("../sql/fill_all" + ".sql", "w")

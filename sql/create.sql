@@ -140,9 +140,12 @@ CREATE TABLE Symptoms (
 	akinesia boolean,
 	alexia boolean,
 	chorea boolean,
-	loss_of_appatite boolean,
+	loss_of_appetite boolean,
 	diarrhea boolean,
 	abdominal_distension boolean,
+	bloating boolean,
+	indigestion boolean,
+	jaundice boolean,
 	PRIMARY KEY (sxId)
 );
 
