@@ -146,6 +146,8 @@ CREATE TABLE Symptoms (
 	bloating boolean,
 	indigestion boolean,
 	jaundice boolean,
+	light_colored_stools boolean,
+	dark_urine boolean,
 	PRIMARY KEY (sxId)
 );
 
