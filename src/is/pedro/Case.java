@@ -15,7 +15,7 @@ public class Case {
     int age;
     char gender;
     String diagnosis = "";
-    Pain pain;
+    Pain pain = new Pain();
 
     public Case() {}
 

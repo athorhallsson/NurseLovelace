@@ -33,6 +33,19 @@ public class WebUI implements SparkApplication {
             int age = Integer.parseInt(request.queryParams("age"));
             char gender = request.queryParams("gender").charAt(0);
             int mainSymptom = Integer.parseInt(request.queryParams("mainsymptom"));
+            String painString = request.queryParams("pain");
+
+            int pos = Integer.parseInt(request.queryParams("pos"));
+            int rpos = Integer.parseInt(request.queryParams("rpos"));
+
+            // Add to painInfo
+            String[] painIndex = painString.split("_");
+            for (int i = 0; i < painIndex.length; i++) {
+                int index = Integer.parseInt(painIndex[i]);
+                if (index >= 0) {
+                    currentCase.pain.painInfo.add(index);
+                }
+            }
 
             currentCase.setAge(age);
             currentCase.setGender(gender);

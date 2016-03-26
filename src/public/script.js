@@ -2,6 +2,7 @@ $(document).ready(function() {
             $("#question").hide();
             $("#confirm").hide();
             $("#correct-diagnosis").hide();
+            $("#pain").hide();
 
             var symptoms;
             // Autocomplete symptoms
@@ -27,16 +28,30 @@ $(document).ready(function() {
                 ageSelect.append('<option value="' + i + '">' + i + '</option>');
             }
 
+            // Pain lists
+            $("#has-pain").change(function () {
+                if ($("#has-pain").prop("checked")) {
+                    $("#pain").show();
+                }
+                else {
+                    $("#pain").hide();
+                }   
+            });  
+
             // INIT
             var initForm = $("#initform");
             initForm.submit(function(event) {
+                var painString = $("#pain-description").val() + "_" + $("#pain-when").val() + "_"
+                painString += $("#pain-long").val() + "_" + $("#pain-changes").val();
+                var pos =  $("#pain-position").val();
+                var rpos = $("#pain-rposition").val();
                 var age = $("#age").val();
                 var gender = $("#gender").val();
                 var mainSymptom = symptoms.indexOf($("#tags").val());
                 $.ajax({
                     type: initForm.attr('method'),
                     url: initForm.attr('action'),
-                    data: 'age=' + age + '&gender=' + gender + '&mainsymptom=' + mainSymptom,
+                    data: 'age=' + age + '&gender=' + gender + '&mainsymptom=' + mainSymptom + '&pain=' + painString + '&pos=' + pos + '&rpos=' + rpos,
                     success : function(text)
                     {
                         var obj = JSON.parse(text); 

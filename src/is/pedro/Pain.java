@@ -15,4 +15,6 @@ public class Pain {
         this.position = position;
         this.rPosition = rPosition;
     }
+
+    public Pain() { }
 }
