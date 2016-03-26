@@ -71,6 +71,50 @@
             </div>
         </div>
 
+        <div class="container" id="pain">
+            <h2>Pain</h2>
+            <p>Are you experiencing any pain?<p>
+            <div>
+                <select name="pain-description" id="pain-description">
+                    <option value="-1">None</option>
+                    <option value="0">Sharp</option>
+                    <option value="1">Dull</option>
+                    <option value="2">Burning</option>
+                    <option value="3">Clenching</option>
+                    <option value="4">Pleuritic</option>
+                    <option value="5">Colicky</option>
+                </select>
+                <select name="pain-when" id="pain-when">
+                    <option value="-1">None</option>
+                    <option value="6">Constant</option>
+                    <option value="7">On rest</option>
+                    <option value="8">On exertion</option>
+                    <option value="9">Dysuria</option>
+                    <option value="10">Dysparenunia</option>
+                </select>
+                <select name="pain-long" id="pain-long">
+                    <option value="-1">None</option>
+                    <option value="11">4 hours</option>
+                    <option value="12">8 hours</option>
+                    <option value="13">1 day</option>
+                    <option value="14">2 days</option>
+                    <option value="15">1 week</option>
+                    <option value="16">1 month</option>
+                    <option value="17">6 months</option>
+                </select>
+                <select name="pain-changes" id="pain-changes">
+                    <option value="-1">None</option>
+                    <option value="18">Better with lying still</option>
+                    <option value="19">Better with moving around</option>
+                    <option value="20">Worse with breathing</option>
+                    <option value="21">Worse with eating</option>
+                    <option value="22">Worse with moving around</option>
+                </select>
+                <input id="correct-diagnosis-text" type="text" placeholder="">
+                <button id="correct-diagnosis-btn">Send</button>
+            </div>
+        </div>
+
         <div class="container">
             <hr>
             <div id="results" class="alert alert-info">Welcome</div>

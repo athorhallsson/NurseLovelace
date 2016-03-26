@@ -15,10 +15,20 @@ public class Case {
     int age;
     char gender;
     String diagnosis = "";
+    Pain pain;
 
     public Case() {}
 
-    public Case(HashSet<Integer> hasMajorSx, HashSet<Integer> hasNotMajorSx, HashSet<Integer> hasMinorSx, HashSet<Integer> hasNotMinorSx, int age, char gender, String diagnosis) {
+    public Case(HashSet<Integer> hasMajorSx, HashSet<Integer> hasNotMajorSx, Pain pain, int age, char gender, String diagnosis) {
+        this.hasMajorSx = hasMajorSx;
+        this.hasNotMajorSx = hasNotMajorSx;
+        this.age = age;
+        this.gender = gender;
+        this.diagnosis = diagnosis;
+        this.pain = pain;
+    }
+
+    public Case(HashSet<Integer> hasMajorSx, HashSet<Integer> hasNotMajorSx, HashSet<Integer> hasMinorSx, HashSet<Integer> hasNotMinorSx, Pain pain, int age, char gender, String diagnosis) {
         this.hasMajorSx = hasMajorSx;
         this.hasNotMajorSx = hasNotMajorSx;
         this.hasMinorSx = hasMinorSx;
@@ -26,6 +36,7 @@ public class Case {
         this.age = age;
         this.gender = gender;
         this.diagnosis = diagnosis;
+        this.pain = pain;
     }
 
     public void setDiagnosis(String diagnosis) {

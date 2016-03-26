@@ -117,13 +117,16 @@ public class Repo {
     public ArrayList<Case> getPreviousCases(int age, char gender) {
         //ResultSet rs = s.executeQuery( "SELECT * FROM Cases c WHERE c.age = " + age + " AND c.gender = " + gender + ";");
         //return getFromCases("SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did;");
-        return getFromCases("SELECT * FROM CASES c JOIN SYMPTOMS major ON c.majorsx = major.sxid JOIN SYMPTOMS minor ON c.minorsx = minor.sxid JOIN Pain p ON p.pId = c.painid JOIN diagnosis d on c.diagnosisId = d.did");
+        String query = "SELECT * FROM CASES c JOIN SYMPTOMS major ON c.majorsx = major.sxid JOIN SYMPTOMS minor ON c.minorsx = minor.sxid JOIN Pain p ON p.pId = c.painid JOIN diagnosis d on c.diagnosisId = d.did JOIN Positions pos ON pos.posid = p.positionid JOIN Positions rpos ON rpos.posid = p.referred_pain_position ";
+
+        return getFromCases(query);
     }
 
     public ArrayList<Case> getCasesWithSymtom(int symptom, boolean value) {
         // return getFromCases("SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did WHERE " + symptoms.get(symptom) + "=" + value + ";");
-        String query = "SELECT * FROM CASES c JOIN SYMPTOMS major ON c.majorsx = major.sxid JOIN SYMPTOMS minor ON c.minorsx = minor.sxid JOIN Pain p ON p.pId = c.painid JOIN diagnosis d on c.diagnosisId = d.did ";
-        query += "WHERE major." + symptoms.get(symptom) + "=" + value + " OR minor." + symptoms.get(symptom) + "=" + value;
+        //String query = "SELECT * FROM CASES c JOIN SYMPTOMS major ON c.majorsx = major.sxid JOIN SYMPTOMS minor ON c.minorsx = minor.sxid JOIN Pain p ON p.pId = c.painid JOIN diagnosis d on c.diagnosisId = d.did ";
+        String query = "SELECT * FROM CASES c JOIN SYMPTOMS major ON c.majorsx = major.sxid JOIN SYMPTOMS minor ON c.minorsx = minor.sxid JOIN Pain p ON p.pId = c.painid JOIN diagnosis d on c.diagnosisId = d.did JOIN Positions pos ON pos.posid = p.positionid JOIN Positions rpos ON rpos.posid = p.referred_pain_position";
+        query += " WHERE major." + symptoms.get(symptom) + "=" + value + " OR minor." + symptoms.get(symptom) + "=" + value;
         System.out.println(query);
         return getFromCases(query);
     }
@@ -147,7 +150,8 @@ public class Repo {
                     if (!rs.wasNull()) {
                         if (bool) {
                             hasMajorSx.add(i - 9);
-                        } else {
+                        }
+                        else {
                             hasNotMajorSx.add(i - 9);
                         }
                     }
@@ -161,26 +165,32 @@ public class Repo {
                     if (!rs.wasNull()) {
                         if (bool) {
                             hasMinorSx.add(i - 61);
-                        } else {
+                        }
+                        else {
                             hasNotMinorSx.add(i - 61);
                         }
                     }
                 }
 
-                HashSet<Integer> pain = new HashSet<Integer>();
+
+                HashSet<Integer> painInfo = new HashSet<Integer>();
+                HashSet<Integer> position = new HashSet<Integer>();
+                HashSet<Integer> rPosition = new HashSet<Integer>();
+
 
                 for (int i = 105; i <= 130; i++) {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
-                            pain.add(i - 105);
-                        } else {
-                            pain.add(i - 105);
+                            painInfo.add(i - 105);
+                        }
+                        else {
+                            painInfo.add(i - 105);
                         }
                     }
                 }
-
-                cases.add(new Case(hasMajorSx, hasNotMajorSx, hasMinorSx, hasNotMinorSx, rs.getInt("age"), rs.getString("gender").charAt(0), rs.getString("dname")));
+                Pain pain = new Pain(painInfo, position, rPosition);
+                cases.add(new Case(hasMajorSx, hasNotMajorSx, hasMinorSx, hasNotMinorSx, pain, rs.getInt("age"), rs.getString("gender").charAt(0), rs.getString("dname")));
             }
             rs.close();
             s.close();
