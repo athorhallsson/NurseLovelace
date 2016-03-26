@@ -1,7 +1,6 @@
 package is.pedro;
 
 import java.util.HashSet;
-import java.util.InputMismatchException;
 
 /**
  * Created by andri on 13/03/16.

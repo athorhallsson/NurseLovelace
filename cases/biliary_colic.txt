@@ -1,0 +1,27 @@
+Biliary Colic
+right_upper_quadrant epigastrial
+right_shoulder_blade
+sharp pleuritic constant four_hours eight_hours worse_with_breathing worse_with_eating
+nausea vomiting loss_of_appetite
+fever malaise chills bloating indigestion
+0
+1
+2
+5
+7
+7
+7
+8
+9
+8
+7
+7
+7
+7
+7
+5
+2
+2
+1
+0
+30

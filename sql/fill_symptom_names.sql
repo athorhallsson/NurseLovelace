@@ -51,6 +51,13 @@ INSERT INTO SymptomNames (sName) VALUES ('chorea');
 INSERT INTO SymptomNames (sName) VALUES ('loss of appatite');
 INSERT INTO SymptomNames (sName) VALUES ('diarrhea');
 INSERT INTO SymptomNames (sName) VALUES ('abdominal distension');
+INSERT INTO SymptomNames (sName) VALUES ('bloating');
+INSERT INTO SymptomNames (sName) VALUES ('indigestion');
+INSERT INTO SymptomNames (sName) VALUES ('jaundice');
+INSERT INTO SymptomNames (sName) VALUES ('light colored stools');
+INSERT INTO SymptomNames (sName) VALUES ('dark urine');
+
+
 /*
 INSERT INTO Diagnosis (dName) VALUES ('Heart Attack');
 INSERT INTO Diagnosis (dName) VALUES ('Pneumonia');
