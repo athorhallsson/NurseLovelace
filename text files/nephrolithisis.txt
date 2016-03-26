@@ -3,7 +3,7 @@ left_costovertebral right_costovertebral left_flank right_flank pelvic suprapubi
 left_groin right_groin testicular
 dysuria sharp colicky four_hours eigth_hours one_day two_days one_week
 nausea hematuria
-polyuria sweating voimting
+polyuria diaphoresis voimiting
 0
 0
 1

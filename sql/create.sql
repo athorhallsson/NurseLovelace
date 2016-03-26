@@ -98,8 +98,7 @@ CREATE TABLE Pain (
 
 CREATE TABLE Symptoms (
 	sxId serial,
-	anxiety boolean,
-	arrythmia boolean,
+	palpitations boolean,
 	chills boolean,
 	clammy_skin boolean,
 	cloudy_urine boolean,
@@ -107,7 +106,8 @@ CREATE TABLE Symptoms (
 	conjunctivitis boolean,
 	cough boolean,
 	dry_cough boolean,
-	sputum_production boolean,
+	productive_cough boolean,
+	hemoptysis boolean,
 	dehydration boolean,
 	dizziness boolean,
 	dysuria boolean,
@@ -127,12 +127,10 @@ CREATE TABLE Symptoms (
 	dyspnea boolean,
 	smelly_urine boolean,
 	sneezing boolean,
-	pharingitis boolean,
 	diaphoresis boolean,
 	tachycardia boolean,
-	urinary_frequency boolean,
+	polyuria boolean,
 	vomiting boolean,
-	wheezing boolean,
 	dysphagia boolean,
 	ataxia boolean,
 	bradykinesia boolean,
@@ -159,6 +157,9 @@ CREATE TABLE Symptoms (
 	jaundice boolean,
 	light_colored_stools boolean,
 	dark_urine boolean,
+	shortness_of_breath boolean,
+	lightheadedness boolean,
+	constipation boolean,
 	PRIMARY KEY (sxId)
 );
 

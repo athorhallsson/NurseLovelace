@@ -2,7 +2,7 @@ Acute upper respiratory tract infection
 head throat maxilar_sinuses frontal_sinuses
 
 four_hours eigth_hours one_day two_days one_week worse_with_bending_forward
-cough dry_cough sputum_production fever nasal_congestion rhinitis
+cough dry_cough productive_cough fever rhinitis
 fatigue malaise loss_of_appetite dehydration diaphoresis shortness_of_breath conjunctivitis chills
 10
 7
