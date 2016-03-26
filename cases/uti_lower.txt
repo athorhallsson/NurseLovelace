@@ -1,7 +1,7 @@
 Urinary tract infection (lower)
 pelvic suprapubic
 lower_back
-dysuria dysparenunia four_hours eigth_hours one_day two_days
+dysuria dysparenunia four_hours eight_hours one_day two_days
 polyuria cloudy_urine smelly_urine sense_of_incomplete_bladder_emptying 
 fever hematuria
 7

@@ -1,9 +1,9 @@
 nephrolithisis
 left_costovertebral right_costovertebral left_flank right_flank pelvic suprapubic
 left_groin right_groin testicular
-dysuria sharp colicky four_hours eigth_hours one_day two_days one_week
+dysuria sharp colicky four_hours eight_hours one_day two_days one_week
 nausea hematuria
-polyuria diaphoresis voimiting
+polyuria diaphoresis vomiting
 0
 0
 1

@@ -1,5 +1,5 @@
 Appendicitis
-epigastrial right_lower_quadrant periumbilical
+epigastrium right_lower_quadrant periumbilical
 right_lower_quadrant right_groin
 constant four_hours eight_hours one_day two_days better_with_lying_still worse_with_eating worse_with_moving_around
 fever nausea loss_of_appetite

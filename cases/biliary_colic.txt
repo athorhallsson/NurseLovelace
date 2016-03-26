@@ -1,5 +1,5 @@
 Biliary Colic
-right_upper_quadrant epigastrial
+right_upper_quadrant epigastrium
 right_shoulder_blade
 sharp pleuritic constant four_hours eight_hours worse_with_breathing worse_with_eating
 nausea vomiting loss_of_appetite

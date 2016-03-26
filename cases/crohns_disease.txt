@@ -1,7 +1,7 @@
-Crohn's disease
+Crohns disease
 anal left_lower_quadrant right_lower_quadrant periumbilical suprapubic pelvic
 lower_back
-dull four_hours eigth_hours one_day two_days one_week one_month six_months worse_with_eating
+dull four_hours eight_hours one_day two_days one_week one_month six_months worse_with_eating
 hematochesia melena diarrhea fever 
 bloating constipation weight_loss fatigue loss_of_appetite nausea vomiting abdominal_distension
 0
