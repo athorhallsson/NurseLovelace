@@ -8,6 +8,7 @@ import java.util.PriorityQueue;
  */
 public class QuestionSearch {
     private Repo repo;
+    private int falseCount = 0;
 
     private ArrayList<QuestionNode> questionArray = new ArrayList<QuestionNode>();
 
@@ -16,13 +17,15 @@ public class QuestionSearch {
     }
 
     public void initSearch(Case currCase) {
-        ArrayList<Case> pCases = repo.getInitCases(currCase);
 
+        ArrayList<Case> pCases = repo.getInitCases(currCase);
+        System.out.println(pCases.size());
         for (int i = 0; i < repo.numberOfSymptoms(); i++) {
             questionArray.add(new QuestionNode(i));
         }
 
         for (Case c : pCases) {
+            System.out.println(c);
             for (Integer sx : c.hasMajorSx) {
                 questionArray.get(sx).rating += 2;
             }
@@ -39,9 +42,13 @@ public class QuestionSearch {
     }
 
     public int nextQuestion() {
-        QuestionNode nextQuestion = new QuestionNode(0);
+        if (falseCount > 5) {
+            return -1;
+        }
+        // Make a dummy question node for comparison
+        QuestionNode nextQuestion = new QuestionNode(-1);
         for(QuestionNode qNode : questionArray) {
-            if (!qNode.asked && qNode.rating > nextQuestion.rating) {
+            if (!qNode.asked && qNode.rating >= nextQuestion.rating) {
                 nextQuestion = qNode;
             }
         }
@@ -50,6 +57,14 @@ public class QuestionSearch {
     }
 
     public void update(int question, boolean answer) {
+        // Count the number of false answer in a row
+        if (!answer) {
+            falseCount++;
+        }
+        else {
+            falseCount = 0;
+        }
+
         ArrayList<Case> relevantCases = repo.getCasesWithSymtom(question, answer);
         for (Case c : relevantCases) {
             for (Integer sx : c.hasMajorSx) {

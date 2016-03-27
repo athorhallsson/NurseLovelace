@@ -18,7 +18,7 @@
         <div class="container" id="personal-info">
             <h2>Personal information</h2>
             <p>Please tell us about yourself so we can help</p>
-            <form id="initform" method="post" action="/initinfo" class="form-inline" role="form">
+            <div>
                 <div class="form group">
                     <label for="age">Age: </label>
                     <select name="age" id="age">
@@ -32,8 +32,8 @@
                     </select>
                 </div>
                 <div class="ui-widget">
-                    <label for="tags">Main Symptom: </label>
-                    <input id="tags">
+                    <label for="main-symptom">Main symptom: </label>
+                    <input id="main-symptom">
                 </div>
                 <div>
                     <label for="has-pain">Are you experiencing any pain?</label>
@@ -99,6 +99,7 @@
                     <div>
                         <label for="pain-position">Where is it located?</label>
                             <select name="pain-position" id="pain-position">
+                                <option value="-1">None</option>
                                 <option value="0">head</option>
                                 <option value="1">temporal</option>
                                 <option value="2">occipital</option>
@@ -155,6 +156,7 @@
                     <div>
                         <label for="pain-rposition">Where does it lead?</label>
                             <select name="pain-rposition" id="pain-rposition">
+                                <option value="-1">None</option>
                                 <option value="0">head</option>
                                 <option value="1">temporal</option>
                                 <option value="2">occipital</option>
@@ -209,8 +211,8 @@
                         </select>
                     </div>
                 </div>
-                <button type="submit">Confirm</button> 
-            </form>
+                <button id="initform-btn">Confirm</button> 
+            </div>
         </div>
 
         <div class="container" id="question">
@@ -242,6 +244,19 @@
             <div>
                 <input id="correct-diagnosis-text" type="text" placeholder="Please enter disease.."/>
                 <button id="correct-diagnosis-btn">Send</button>
+            </div>
+        </div>
+
+        <div class="container" id="add-more">
+            <h2>Do you have any more symptoms?</h2>
+            <p>Please enter them here.<p>
+            <div>
+                <div class="ui-widget">
+                    <label for="add-more-box">Symptom: </label>
+                    <input id="add-more-box">
+                </div>
+                <button id="add-more-btn-no">No</button>
+                <button id="add-more-btn-yes">Yes</button>
             </div>
         </div>
 

@@ -1,4 +1,4 @@
-﻿DROP TABLE IF EXISTS Cases, Diagnosis, SymptomNames, Symptoms, Positions, Pain;
+﻿DROP TABLE IF EXISTS Cases, Diagnosis, SymptomNames, Symptoms, Positions, Pain, PainPosition, PainSx;
 
 CREATE TABLE Diagnosis (
 	dId serial,
@@ -182,4 +182,16 @@ CREATE TABLE SymptomNames (
 	sId serial,
 	sName varchar(100) NOT NULL,
 	PRIMARY KEY (sId)
+);
+
+CREATE TABLE PainPosition (
+	ppId serial,
+	ppName varchar(100) NOT NULL,
+	PRIMARY KEY (ppId)
+);
+
+CREATE TABLE PainSx (
+	psId serial,
+	psName varchar(100) NOT NULL,
+	PRIMARY KEY (psId)
 );

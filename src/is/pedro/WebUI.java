@@ -49,8 +49,13 @@ public class WebUI implements SparkApplication {
             currentCase.setAge(age);
             currentCase.setGender(gender);
             currentCase.addToHas(mainSymptom);
-            currentCase.pain.position.add(pos);
-            currentCase.pain.rPosition.add(rpos);
+
+            if (pos >= 0) {
+                currentCase.pain.position.add(pos);
+            }
+            if (rpos >= 0) {
+                currentCase.pain.rPosition.add(rpos);
+            }
 
             response.status(200);
 
@@ -76,7 +81,6 @@ public class WebUI implements SparkApplication {
             response.status(200);
             qSearch.update(symptom, hasSymptom);
             Integer nextIndex = qSearch.nextQuestion();
-
             return "{ \"symptom\":\""+ nextIndex +"\" }";
         });
 

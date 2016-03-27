@@ -70,78 +70,154 @@ public class Repo {
         }
     }
 
-    public void addCase(Case newCase) {
-        Statement s;
-        Statement s2;
-        try {
-            s = c.createStatement();
-            StringBuilder query = new StringBuilder("INSERT INTO Cases (");
-            query.append("diagnosisId, age, gender, ");
-            for (Iterator<Integer> i = newCase.hasMajorSx.iterator(); i.hasNext();) {
-                Integer sx = i.next();
-                query.append(symptoms.get(sx));
-                if (i.hasNext() || newCase.hasNotMajorSx.size() != 0) {
+    private String makePositionQuery(HashSet<Integer> hs) {
+
+        StringBuilder query = new StringBuilder("INSERT INTO Positions (");
+        for (Iterator<Integer> i = hs.iterator(); i.hasNext();) {
+            Integer posIndex = i.next();
+            query.append(painPos.get(posIndex));
+            if (i.hasNext() || hs.size() != 0) {
+                query.append(", ");
+            }
+        }
+       query.append(") VALUES (");
+
+        for (int i = 0; i < hs.size(); i++) {
+            query.append("true");
+            if (i == hs.size() - 1) {
+                if (hs.size() != 0) {
                     query.append(", ");
                 }
-            }
-            for (Iterator<Integer> i = newCase.hasNotMajorSx.iterator(); i.hasNext();) {
-                Integer notSx = i.next();
-                query.append(symptoms.get(notSx));
-                if (i.hasNext()) {
-                    query.append(", ");
-                }
-            }
-            query.append(") VALUES (");
-
-            s2 = c.createStatement();
-            String diagnosisQuery = "SELECT d.dId FROM Diagnosis d WHERE d.dname='" + newCase.diagnosis + "';";
-            System.out.println(diagnosisQuery);
-
-            ResultSet rs2 = s2.executeQuery(diagnosisQuery);
-            // Check if there is an existing diagnosis
-            if (rs2.next()) {
-                int did = rs2.getInt("dId");
-                query.append(did);
             }
             else {
-                s2.executeUpdate("INSERT INTO Diagnosis (dname) VALUES ('" + newCase.diagnosis + "');");
-                rs2 = s2.executeQuery(diagnosisQuery);
-                rs2.next();
-                int did = rs2.getInt("dId");
-                query.append(did);
+                query.append(", ");
             }
-            query.append(", ");
-            query.append(newCase.age);
-            query.append(", '");
-            query.append(newCase.gender);
-            query.append("', ");
+        }
+        return query.toString();
+    }
 
-            for (int i = 0; i < newCase.hasMajorSx.size(); i++) {
-                query.append("true");
-                if (i == newCase.hasMajorSx.size() - 1) {
-                    if (newCase.hasNotMajorSx.size() != 0) {
-                        query.append(", ");
-                    }
-                }
-                else {
+    private String makePainQuery(HashSet<Integer> hs, Integer posId, Integer rPosId) {
+
+        StringBuilder query = new StringBuilder("INSERT INTO Pain (positionId, referred_pain_position, ");
+        for (Iterator<Integer> i = hs.iterator(); i.hasNext();) {
+            Integer posIndex = i.next();
+            query.append(painSx.get(posIndex));
+            if (i.hasNext() || hs.size() != 0) {
+                query.append(", ");
+            }
+        }
+        query.append(") VALUES (" + posId + ", " + rPosId + ", ");
+
+        for (int i = 0; i < hs.size(); i++) {
+            query.append("true");
+            if (i == hs.size() - 1) {
+                if (hs.size() != 0) {
                     query.append(", ");
                 }
             }
-            for (int i = 0; i < newCase.hasNotMajorSx.size(); i++) {
-                query.append("false");
-                if (i != newCase.hasNotMajorSx.size() - 1) {
+            else {
+                query.append(", ");
+            }
+        }
+        return query.toString();
+    }
+
+    private String makeSymptomsQuery(HashSet<Integer> tSet, HashSet<Integer> fSet) {
+
+        StringBuilder query = new StringBuilder("INSERT INTO Symptoms (");
+        for (Iterator<Integer> i = tSet.iterator(); i.hasNext();) {
+            Integer posIndex = i.next();
+            query.append(painSx.get(posIndex));
+            if (i.hasNext() || tSet.size() != 0) {
+                query.append(", ");
+            }
+        }
+        for (Iterator<Integer> i = fSet.iterator(); i.hasNext();) {
+            Integer posIndex = i.next();
+            query.append(painSx.get(posIndex));
+            if (i.hasNext() || fSet.size() != 0) {
+                query.append(", ");
+            }
+        }
+        query.append(") VALUES (");
+
+        for (int i = 0; i < tSet.size(); i++) {
+            query.append("true");
+            if (i == tSet.size() - 1) {
+                if (tSet.size() != 0) {
                     query.append(", ");
                 }
             }
-            query.append(");");
-            System.out.println(query.toString());
-            s.executeUpdate(query.toString());
-            s.close();
+            else {
+                query.append(", ");
+            }
+        }
+        for (int i = 0; i < fSet.size(); i++) {
+            query.append("false");
+            if (i == fSet.size() - 1) {
+                if (fSet.size() != 0) {
+                    query.append(", ");
+                }
+            }
+            else {
+                query.append(", ");
+            }
+        }
+        return query.toString();
+    }
+
+    public void addCase(Case newCase) {
+        Statement s1;
+        Statement s2;
+        Statement s3;
+        Statement s4;
+        Statement s5;
+        Statement s6;
+        Statement s7;
+        try {
+            int dId;
+            s1 = c.createStatement();
+            s2 = c.createStatement();
+            s3 = c.createStatement();
+            s4 = c.createStatement();
+            s5 = c.createStatement();
+            s6 = c.createStatement();
+            s7 = c.createStatement();
+
+            String diagnosisQuery = "SELECT d.dId FROM Diagnosis d WHERE d.dname='" + newCase.diagnosis + "';";
+            ResultSet rs1 = s1.executeQuery(diagnosisQuery);
+            // Check if there is an existing diagnosis
+            if (rs1.next()) {
+                dId = rs1.getInt("dId");
+            }
+            else {
+                dId = s1.executeUpdate("INSERT INTO Diagnosis (dname) VALUES ('" + newCase.diagnosis + "');", Statement.RETURN_GENERATED_KEYS);
+            }
+
+            int posId = s2.executeUpdate(makePositionQuery(newCase.pain.position), Statement.RETURN_GENERATED_KEYS);
+            int rPosId = s3.executeUpdate(makePositionQuery(newCase.pain.rPosition), Statement.RETURN_GENERATED_KEYS);
+            int painId = s4.executeUpdate(makePainQuery(newCase.pain.painInfo, posId, rPosId), Statement.RETURN_GENERATED_KEYS);
+
+            int majorSxId = s5.executeUpdate(makeSymptomsQuery(newCase.hasMajorSx, newCase.hasNotMajorSx));
+            int minorSxId = s6.executeUpdate(makeSymptomsQuery(newCase.hasMinorSx, newCase.hasNotMinorSx));
+
+
+
+            String query = "INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (";
+            query += dId + ", " + newCase.age + ", '" + newCase.gender + "', " + majorSxId + ", " + minorSxId + ", " + painId + ");";
+            s7.executeUpdate(query);
+
+            s1.close();
+            s2.close();
+            s3.close();
+            s4.close();
+            s5.close();
+            s6.close();
+            s7.close();
         } catch (Exception e) {
             System.err.println( e.getClass().getName()+": "+ e.getMessage() );
             System.exit(0);
         }
-
     }
 
     public ArrayList<Case> getBaseCases(Case currCase) {
@@ -171,7 +247,7 @@ public class Repo {
         for (Integer pSx : currCase.pain.painInfo) {
             query += " AND p." + painSx.get(pSx) + "=" + value;
         }
-
+/*
         for (Integer pPos : currCase.pain.position) {
             query += " AND pos." + painPos.get(pPos) + "=" + value;
         }
@@ -179,8 +255,8 @@ public class Repo {
         for (Integer rPos : currCase.pain.rPosition) {
             query += " AND rpos." + painPos.get(rPos) + "=" + value;
         }
-
-        // System.out.println(query);
+*/
+  //      System.out.println(query);
         return getFromCases(query);
     }
 

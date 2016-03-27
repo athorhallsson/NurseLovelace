@@ -3,6 +3,7 @@ $(document).ready(function() {
             $("#confirm").hide();
             $("#correct-diagnosis").hide();
             $("#pain").hide();
+            $("#add-more").hide();
 
             var symptoms;
             // Autocomplete symptoms
@@ -14,7 +15,10 @@ $(document).ready(function() {
                 {
                     var obj = JSON.parse(text); 
                     symptoms = obj.symptoms;
-                    $("#tags").autocomplete({
+                    $("#main-symptom").autocomplete({
+                        source: symptoms
+                    });
+                    $("#add-more-box").autocomplete({
                         source: symptoms
                     });
                 }
@@ -39,18 +43,17 @@ $(document).ready(function() {
             });  
 
             // INIT
-            var initForm = $("#initform");
-            initForm.submit(function(event) {
+            $("#initform-btn").on('click', function(e) {
                 var painString = $("#pain-description").val() + "_" + $("#pain-when").val() + "_"
                 painString += $("#pain-long").val() + "_" + $("#pain-changes").val();
                 var pos =  $("#pain-position").val();
                 var rpos = $("#pain-rposition").val();
                 var age = $("#age").val();
                 var gender = $("#gender").val();
-                var mainSymptom = symptoms.indexOf($("#tags").val());
+                var mainSymptom = symptoms.indexOf($("#main-symptom").val());
                 $.ajax({
-                    type: initForm.attr('method'),
-                    url: initForm.attr('action'),
+                    type: "post",
+                    url: "/initinfo",
                     data: 'age=' + age + '&gender=' + gender + '&mainsymptom=' + mainSymptom + '&pain=' + painString + '&pos=' + pos + '&rpos=' + rpos,
                     success : function(text)
                     {
@@ -68,7 +71,6 @@ $(document).ready(function() {
                 }).fail(function() {
                     $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
                 });
-                event.preventDefault();
             });
 
             // CONFIRM
@@ -113,6 +115,10 @@ $(document).ready(function() {
                     {
                         var obj = JSON.parse(text); 
                         var symptomIndex = obj.symptom;
+                        if (symptomIndex == -1) {
+                            $("#question").hide();
+                            $("#add-more").show();
+                        }
                         $("#symptomid").attr("value", symptomIndex);
                         $("#symptom").html(symptoms[symptomIndex])
                     }
@@ -133,7 +139,7 @@ $(document).ready(function() {
             });
 
             // DONE
-            var doneBtn = $("#done-button");
+            var doneBtn = $("#done-button, #add-more-btn-no");
             doneBtn.click(function(event) {
                 $.ajax({
                     type: "get",
@@ -147,11 +153,36 @@ $(document).ready(function() {
                 }).done(function() {
                     $("#results").html('We really hope it is.').attr('class', 'alert alert-success');
                     $("#question").hide();
+                    $("#add-more").hide();
                     $("#confirm").show();
                 }).fail(function() {
                     $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
                 });
             });
 
+            // ADD MORE
+            var addMoreBtn = $("#add-more-btn-yes");
+            addMoreBtn.click(function(event) {
+                var answer = "true";
+                var symptom = symptoms.indexOf($("#add-more-box").val());
+                $.ajax({
+                    type: "post",
+                    url: "/answer",
+                    data: 'answer=' + answer + '&symptom=' + symptom,
+                    success : function(text)
+                    {
+                        var obj = JSON.parse(text); 
+                        var symptomIndex = obj.symptom;
+                        $("#symptomid").attr("value", symptomIndex);
+                        $("#symptom").html(symptoms[symptomIndex])
+                    }
+                }).done(function() {
+                    $("#add-more").hide();
+                    $("#question").show();
+                    $("#results").html('Symptom number ' + symptom + ' marked as ' + answer + '.').attr('class', 'alert alert-success');
+                }).fail(function() {
+                    $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
+                });
+            });
 
         });
