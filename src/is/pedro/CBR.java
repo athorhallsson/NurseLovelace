@@ -6,19 +6,21 @@ import java.util.ArrayList;
  * Created by andri on 13/03/16.
  */
 public class CBR {
-    ArrayList<Case> prevCases = null;
+    private ArrayList<Case> baseCases = null;
+    private Repo repo;
 
     // private int simularityLimit = 0;
 
-    public CBR(ArrayList<Case> cases) {
-        this.prevCases = cases;
+    public CBR(Case currCase, Repo repo) {
+        this.repo = repo;
+        this.baseCases = repo.getBaseCases(currCase);
     }
 
     public String findDiagnosis(Case c) {
         Case closestMatch = null;
         int smallestDifference = Integer.MAX_VALUE;
 
-        for (Case oldCase : prevCases) {
+        for (Case oldCase : baseCases) {
             int difference = compareCases(c, oldCase);
 
             if (difference < smallestDifference) {

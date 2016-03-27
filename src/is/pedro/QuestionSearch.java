@@ -11,17 +11,18 @@ public class QuestionSearch {
 
     private ArrayList<QuestionNode> questionArray = new ArrayList<QuestionNode>();
 
-    public QuestionSearch(ArrayList<Case> prevCases, Repo repo) {
+    public QuestionSearch(Repo repo) {
         this.repo = repo;
-        initSearch(prevCases);
     }
 
-    private void initSearch(ArrayList<Case> prevCases) {
-         for (int i = 0; i < repo.numberOfSymptoms(); i++) {
-             questionArray.add(new QuestionNode(i));
-         }
+    public void initSearch(Case currCase) {
+        ArrayList<Case> pCases = repo.getInitCases(currCase);
 
-        for (Case c : prevCases) {
+        for (int i = 0; i < repo.numberOfSymptoms(); i++) {
+            questionArray.add(new QuestionNode(i));
+        }
+
+        for (Case c : pCases) {
             for (Integer sx : c.hasMajorSx) {
                 questionArray.get(sx).rating += 2;
             }

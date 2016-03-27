@@ -21,9 +21,8 @@ public class WebUI implements SparkApplication {
     @Override
     public void init() {
         final Repo repo = new Repo();
-        ArrayList<Case> pCases = repo.getPreviousCases(9, 'M');
 
-        QuestionSearch qSearch = new QuestionSearch(pCases, repo);
+        QuestionSearch qSearch = new QuestionSearch(repo);
 
         Case currentCase = new Case();
 
@@ -50,10 +49,12 @@ public class WebUI implements SparkApplication {
             currentCase.setAge(age);
             currentCase.setGender(gender);
             currentCase.addToHas(mainSymptom);
+            currentCase.pain.position.add(pos);
+            currentCase.pain.rPosition.add(rpos);
 
             response.status(200);
 
-            qSearch.update(mainSymptom, true);
+            qSearch.initSearch(currentCase);
             qSearch.setToAsked(mainSymptom);
             Integer nextIndex = qSearch.nextQuestion();
 
@@ -98,7 +99,7 @@ public class WebUI implements SparkApplication {
         // GET
 
         get("/done", (request, response) -> {
-            CBR cbr = new CBR(pCases);
+            CBR cbr = new CBR(currentCase, repo);
             String diagnosis = cbr.findDiagnosis(currentCase);
             currentCase.setDiagnosis(diagnosis);
             response.status(200);

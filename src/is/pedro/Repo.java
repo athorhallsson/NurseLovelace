@@ -24,15 +24,34 @@ public class Repo {
     private int refstart = 217;
     private int refEnd = 267;
 
+    private String joinQuery = "SELECT * FROM CASES c "
+        + "JOIN SYMPTOMS major ON c.majorsx = major.sxid "
+        + "JOIN SYMPTOMS minor ON c.minorsx = minor.sxid "
+        + "JOIN Pain p ON p.pId = c.painid "
+        + "JOIN diagnosis d on c.diagnosisId = d.did "
+        + "JOIN Positions pos ON pos.posid = p.positionid "
+        + "JOIN Positions rpos ON rpos.posid = p.referred_pain_position ";
+
+
     private ArrayList<String> symptoms = new ArrayList<String>();
+    private ArrayList<String> painSx = new ArrayList<String>();
+    private ArrayList<String> painPos = new ArrayList<String>();
 
     private Connection c;
 
     public Repo() {
         connectToDb();
-        ArrayList<String> tempSymptoms = this.getSymptoms();
-        for (int i = 0; i < tempSymptoms.size(); i++) {
-            symptoms.add(tempSymptoms.get(i).replace(' ', '_'));
+        ArrayList<String> temp = this.getSymptoms();
+        for (int i = 0; i < temp.size(); i++) {
+            this.symptoms.add(temp.get(i).replace(' ', '_'));
+        }
+        temp = this.getPainPos();
+        for (int i = 0; i < temp.size(); i++) {
+            this.painPos.add(temp.get(i).replace(' ', '_'));
+        }
+        temp = this.getPainSx();
+        for (int i = 0; i < temp.size(); i++) {
+            this.painSx.add(temp.get(i).replace(' ', '_'));
         }
     }
 
@@ -125,20 +144,49 @@ public class Repo {
 
     }
 
-    public ArrayList<Case> getPreviousCases(int age, char gender) {
-        //ResultSet rs = s.executeQuery( "SELECT * FROM Cases c WHERE c.age = " + age + " AND c.gender = " + gender + ";");
-        //return getFromCases("SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did;");
-        String query = "SELECT * FROM CASES c JOIN SYMPTOMS major ON c.majorsx = major.sxid JOIN SYMPTOMS minor ON c.minorsx = minor.sxid JOIN Pain p ON p.pId = c.painid JOIN diagnosis d on c.diagnosisId = d.did JOIN Positions pos ON pos.posid = p.positionid JOIN Positions rpos ON rpos.posid = p.referred_pain_position ";
+    public ArrayList<Case> getBaseCases(Case currCase) {
+        int ageMin = currCase.age - 10;
+        int ageMax = currCase.age + 10;
+        String gender = "'" + currCase.gender + "'";
 
+        String query = joinQuery;
+        query += "WHERE c.gender = " + gender;
+        query += " AND c.age BETWEEN " + ageMin + " AND " + ageMax;
+        System.out.println(query);
+        return getFromCases(query);
+    }
+
+    public ArrayList<Case> getInitCases(Case currCase) {
+        Iterator i = currCase.hasMajorSx.iterator();
+        boolean value = true;
+        int symptom = 0;
+
+        if (i.hasNext()) {
+             symptom = (int)i.next();
+        }
+
+        String query = joinQuery;
+        query += "WHERE major." + symptoms.get(symptom) + "=" + value + " OR minor." + symptoms.get(symptom) + "=" + value;
+
+        for (Integer pSx : currCase.pain.painInfo) {
+            query += " AND p." + painSx.get(pSx) + "=" + value;
+        }
+
+        for (Integer pPos : currCase.pain.position) {
+            query += " AND pos." + painPos.get(pPos) + "=" + value;
+        }
+
+        for (Integer rPos : currCase.pain.rPosition) {
+            query += " AND rpos." + painPos.get(rPos) + "=" + value;
+        }
+
+        // System.out.println(query);
         return getFromCases(query);
     }
 
     public ArrayList<Case> getCasesWithSymtom(int symptom, boolean value) {
-        // return getFromCases("SELECT * FROM Cases c JOIN diagnosis d on c.diagnosisId = d.did WHERE " + symptoms.get(symptom) + "=" + value + ";");
-        //String query = "SELECT * FROM CASES c JOIN SYMPTOMS major ON c.majorsx = major.sxid JOIN SYMPTOMS minor ON c.minorsx = minor.sxid JOIN Pain p ON p.pId = c.painid JOIN diagnosis d on c.diagnosisId = d.did ";
-        String query = "SELECT * FROM CASES c JOIN SYMPTOMS major ON c.majorsx = major.sxid JOIN SYMPTOMS minor ON c.minorsx = minor.sxid JOIN Pain p ON p.pId = c.painid JOIN diagnosis d on c.diagnosisId = d.did JOIN Positions pos ON pos.posid = p.positionid JOIN Positions rpos ON rpos.posid = p.referred_pain_position";
-        query += " WHERE major." + symptoms.get(symptom) + "=" + value + " OR minor." + symptoms.get(symptom) + "=" + value;
-        System.out.println(query);
+        String query = joinQuery + "WHERE major." + symptoms.get(symptom) + "=" + value + " OR minor." + symptoms.get(symptom) + "=" + value;
+       // System.out.println(query);
         return getFromCases(query);
     }
 
@@ -195,9 +243,6 @@ public class Repo {
                         if (bool) {
                             painInfo.add(i - painStart);
                         }
-                        else {
-                            painInfo.add(i - painStart);
-                        }
                     }
                 }
 
@@ -207,9 +252,6 @@ public class Repo {
                         if (bool) {
                             position.add(i - posStart);
                         }
-                        else {
-                            position.add(i - posStart);
-                        }
                     }
                 }
 
@@ -217,9 +259,6 @@ public class Repo {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
-                            rPosition.add(i - refstart);
-                        }
-                        else {
                             rPosition.add(i - refstart);
                         }
                     }
@@ -254,6 +293,44 @@ public class Repo {
             System.exit(0);
         }
         return symptoms;
+    }
+
+    public ArrayList<String> getPainSx() {
+        ArrayList<String> painSx = new ArrayList<String>();
+        Statement s;
+        try {
+            s = c.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM PainSx ps ORDER BY ps.psId;");
+
+            while (rs.next()) {
+                painSx.add(rs.getString("psName"));
+            }
+            rs.close();
+            s.close();
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.exit(0);
+        }
+        return painSx;
+    }
+
+    public ArrayList<String> getPainPos() {
+        ArrayList<String> painPos = new ArrayList<String>();
+        Statement s;
+        try {
+            s = c.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM PainPosition pp ORDER BY pp.ppId;");
+
+            while (rs.next()) {
+                painPos.add(rs.getString("ppName"));
+            }
+            rs.close();
+            s.close();
+        } catch (Exception e) {
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.exit(0);
+        }
+        return painPos;
     }
 
 }
