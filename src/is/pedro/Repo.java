@@ -115,7 +115,7 @@ public class Repo {
         for (Iterator<Integer> i = tSet.iterator(); i.hasNext();) {
             Integer posIndex = i.next();
             query.append(symptoms.get(posIndex));
-            if (i.hasNext() && fSet.size() != 0) {
+            if (i.hasNext() || fSet.size() != 0) {
                 query.append(", ");
             }
         }
@@ -130,7 +130,7 @@ public class Repo {
 
         for (int i = 0; i < tSet.size(); i++) {
             query.append("true");
-            if (i != tSet.size() - 1 && fSet.size() != 0) {
+            if (i != tSet.size() - 1 || fSet.size() != 0) {
                 query.append(", ");
             }
         }
@@ -180,21 +180,44 @@ public class Repo {
             int minorSxId = 0;
 
             if (newCase.pain.position.size() != 0) {
-                posId = s2.executeUpdate(makePositionQuery(newCase.pain.position), Statement.RETURN_GENERATED_KEYS);
+                s2.executeUpdate(makePositionQuery(newCase.pain.position), Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs2 = s2.getGeneratedKeys();
+                if (rs2.next()) {
+                    posId = rs2.getInt(1);
+                }
             }
+            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
             if (newCase.pain.rPosition.size() != 0) {
-                rPosId = s3.executeUpdate(makePositionQuery(newCase.pain.rPosition), Statement.RETURN_GENERATED_KEYS);
+                s3.executeUpdate(makePositionQuery(newCase.pain.rPosition), Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs3 = s3.getGeneratedKeys();
+                if (rs3.next()) {
+                    rPosId = rs3.getInt(1);
+                }
             }
+            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
             if (newCase.pain.painInfo.size() != 0) {
-                painId = s4.executeUpdate(makePainQuery(newCase.pain.painInfo, posId, rPosId), Statement.RETURN_GENERATED_KEYS);
+                s4.executeUpdate(makePainQuery(newCase.pain.painInfo, posId, rPosId), Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs4 = s4.getGeneratedKeys();
+                if (rs4.next()) {
+                    painId = rs4.getInt(1);
+                }
             }
-            if (newCase.hasMajorSx.size() == 0 && newCase.hasNotMajorSx.size() == 0) {
-                majorSxId = s5.executeUpdate(makeSymptomsQuery(newCase.hasMajorSx, newCase.hasNotMajorSx));
+            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
+            if (newCase.hasMajorSx.size() != 0 && newCase.hasNotMajorSx.size() != 0) {
+                s5.executeUpdate(makeSymptomsQuery(newCase.hasMajorSx, newCase.hasNotMajorSx));
+                ResultSet rs5 = s5.getGeneratedKeys();
+                if (rs5.next()) {
+                    majorSxId = rs5.getInt(1);
+                }
             }
-            if (newCase.hasMinorSx.size() == 0 && newCase.hasNotMinorSx.size() == 0) {
-                minorSxId = s6.executeUpdate(makeSymptomsQuery(newCase.hasMinorSx, newCase.hasNotMinorSx));
+            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
+            if (newCase.hasMinorSx.size() != 0 && newCase.hasNotMinorSx.size() != 0) {
+                s6.executeUpdate(makeSymptomsQuery(newCase.hasMinorSx, newCase.hasNotMinorSx));
+                ResultSet rs6 = s6.getGeneratedKeys();
+                if (rs6.next()) {
+                    minorSxId = rs6.getInt(1);
+                }
             }
-
             System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
             
             String query = "INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (";
