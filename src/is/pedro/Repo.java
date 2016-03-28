@@ -17,8 +17,8 @@ public class Repo {
     private int majorEnd = 70;
     private int minorStart = 72;
     private int minorEnd = 133;
-    private int painStart = 132;
-    private int painEnd = 162;
+    private int painStart = 137;
+    private int painEnd = 161;
     private int posStart = 165;
     private int posEnd = 215;
     private int refstart = 217;
@@ -33,9 +33,9 @@ public class Repo {
         + "JOIN Positions rpos ON rpos.posid = p.referred_pain_position ";
 
 
-    private ArrayList<String> symptoms = new ArrayList<String>();
-    private ArrayList<String> painSx = new ArrayList<String>();
-    private ArrayList<String> painPos = new ArrayList<String>();
+    public ArrayList<String> symptoms = new ArrayList<String>();
+    public ArrayList<String> painSx = new ArrayList<String>();
+    public ArrayList<String> painPos = new ArrayList<String>();
 
     private Connection c;
 
@@ -290,6 +290,9 @@ public class Repo {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
+                            if (i - majorStart > 62) {
+                                System.out.println("Major out of bounds: " + rs.getString("dname") + " age: " + rs.getInt("age"));
+                            }
                             hasMajorSx.add(i - majorStart);
                         }
                         else {
@@ -305,6 +308,9 @@ public class Repo {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
+                            if (i - minorStart > 62) {
+                                System.out.println("Minor out of bounds: " + rs.getString("dname") + " age: " + rs.getInt("age"));
+                            }
                             hasMinorSx.add(i - minorStart);
                         }
                         else {
@@ -323,6 +329,9 @@ public class Repo {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
+                            if (i - painStart > 24) {
+                                System.out.println("Pain out of bounds: " + rs.getString("dname") + " age: " + rs.getInt("age"));
+                            }
                             painInfo.add(i - painStart);
                         }
                     }
@@ -332,6 +341,9 @@ public class Repo {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
+                            if (i - posStart > 50) {
+                                System.out.println("Pos out of bounds: " + rs.getString("dname") + " age: " + rs.getInt("age"));
+                            }
                             position.add(i - posStart);
                         }
                     }
@@ -341,6 +353,9 @@ public class Repo {
                     Boolean bool = rs.getBoolean(i);
                     if (!rs.wasNull()) {
                         if (bool) {
+                            if (i - refstart > 50) {
+                                System.out.println("rPos out of bounds: " + rs.getString("dname") + " age: " + rs.getInt("age"));
+                            }
                             rPosition.add(i - refstart);
                         }
                     }

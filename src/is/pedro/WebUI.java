@@ -104,10 +104,14 @@ public class WebUI implements SparkApplication {
 
         get("/done", (request, response) -> {
             CBR cbr = new CBR(currentCase, repo);
-            String diagnosis = cbr.findDiagnosis(currentCase);
-            currentCase.setDiagnosis(diagnosis);
+            ArrayList<Case> ddxList = cbr.findDiagnosis();
+            //currentCase.setDiagnosis(diagnosis);
             response.status(200);
-            return "{ \"diagnosis\":\""+ diagnosis +"\" }";
+            StringBuilder ddxString = new StringBuilder();
+            for (Case ddx : ddxList) {
+                ddxString.append(ddx.diagnosis + "\n");
+            }
+            return "{ \"diagnosis\":\""+ ddxString +"\" }";
         });
 
         get("/symptoms", (request, response) -> {

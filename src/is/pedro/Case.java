@@ -1,5 +1,6 @@
 package is.pedro;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -50,6 +51,28 @@ public class Case {
     public void addToHas(Integer symptom) { hasMajorSx.add(symptom); }
 
     public void addToHasNot (Integer symptom) { hasNotMajorSx.add(symptom); }
+
+    public String caseToString(ArrayList<String> symptoms, ArrayList<String> painSx, ArrayList<String> pos) {
+        StringBuilder stb = new StringBuilder();
+        stb.append(this.age + " " + this.gender + " ");
+        for (Integer majorSx : hasMajorSx) {
+            stb.append(symptoms.get(majorSx) + " ");
+        }
+        for (Integer minorSx : hasMinorSx) {
+            stb.append(symptoms.get(minorSx) + " ");
+        }
+        for (Integer pSx : pain.painInfo) {
+            stb.append(painSx.get(pSx) + " ");
+        }
+        for (Integer p : pain.position) {
+            stb.append(pos.get(p) + " " + p + " ");
+        }
+        for (Integer rp : pain.rPosition) {
+            stb.append(pos.get(rp) + " ");
+        }
+        stb.append(diagnosis);
+        return stb.toString();
+    }
 
     @Override
     public String toString() {

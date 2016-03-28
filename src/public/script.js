@@ -44,7 +44,7 @@ $(document).ready(function() {
 
             // INIT
             $("#initform-btn").on('click', function(e) {
-                var painString = $("#pain-description").val() + "_" + $("#pain-when").val() + "_"
+                var painString = $("#pain-description").val() + "_" + $("#pain-when").val() + "_";
                 painString += $("#pain-long").val() + "_" + $("#pain-changes").val();
                 var pos =  $("#pain-position").val();
                 var rpos = $("#pain-rposition").val();
