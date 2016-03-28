@@ -242,12 +242,18 @@ public class Repo {
         }
 
         String query = joinQuery;
-        query += "WHERE major." + symptoms.get(symptom) + "=" + value + " OR minor." + symptoms.get(symptom) + "=" + value;
+        int ageMin = currCase.age - 10;
+        int ageMax = currCase.age + 10;
+        String gender = "'" + currCase.gender + "'";
+
+        query += "WHERE c.gender = " + gender;
+        query += " AND c.age BETWEEN " + ageMin + " AND " + ageMax;
+        query += "AND major." + symptoms.get(symptom) + "=" + value + " OR minor." + symptoms.get(symptom) + "=" + value;
 
         for (Integer pSx : currCase.pain.painInfo) {
             query += " AND p." + painSx.get(pSx) + "=" + value;
         }
-/*
+
         for (Integer pPos : currCase.pain.position) {
             query += " AND pos." + painPos.get(pPos) + "=" + value;
         }
@@ -255,8 +261,8 @@ public class Repo {
         for (Integer rPos : currCase.pain.rPosition) {
             query += " AND rpos." + painPos.get(rPos) + "=" + value;
         }
-*/
-  //      System.out.println(query);
+
+        //System.out.println(query);
         return getFromCases(query);
     }
 
