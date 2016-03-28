@@ -25,7 +25,7 @@ public class QuestionSearch {
         }
 
         for (Case c : pCases) {
-            System.out.println(c);
+            //System.out.println(c);
             for (Integer sx : c.hasMajorSx) {
                 questionArray.get(sx).rating += 2;
             }
@@ -67,6 +67,7 @@ public class QuestionSearch {
 
         ArrayList<Case> relevantCases = repo.getCasesWithSymtom(question, answer);
         for (Case c : relevantCases) {
+            //System.out.println(c);
             for (Integer sx : c.hasMajorSx) {
                 questionArray.get(sx).rating += 2;
             }
