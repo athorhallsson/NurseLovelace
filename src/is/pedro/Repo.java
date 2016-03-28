@@ -173,19 +173,30 @@ public class Repo {
                 dId = s1.executeUpdate("INSERT INTO Diagnosis (dname) VALUES ('" + newCase.diagnosis + "');", Statement.RETURN_GENERATED_KEYS);
             }
 
-            Integer posId = s2.executeUpdate(makePositionQuery(newCase.pain.position), Statement.RETURN_GENERATED_KEYS);
-            Integer rPosId = s3.executeUpdate(makePositionQuery(newCase.pain.rPosition), Statement.RETURN_GENERATED_KEYS);
+            int posId = 0;
+            int rPosId = 0;
+            int painId = 0;
+            int majorSxId = 0;
+            int minorSxId = 0;
 
-            String painQuery = makePainQuery(newCase.pain.painInfo, posId, rPosId);
-            System.out.println(painQuery);
-            Integer painId = s4.executeUpdate(painQuery, Statement.RETURN_GENERATED_KEYS);
+            if (newCase.pain.position.size() != 0) {
+                posId = s2.executeUpdate(makePositionQuery(newCase.pain.position), Statement.RETURN_GENERATED_KEYS);
+            }
+            if (newCase.pain.rPosition.size() != 0) {
+                rPosId = s3.executeUpdate(makePositionQuery(newCase.pain.rPosition), Statement.RETURN_GENERATED_KEYS);
+            }
+            if (newCase.pain.painInfo.size() != 0) {
+                painId = s4.executeUpdate(makePainQuery(newCase.pain.painInfo, posId, rPosId), Statement.RETURN_GENERATED_KEYS);
+            }
+            if (newCase.hasMajorSx.size() == 0 && newCase.hasNotMajorSx.size() == 0) {
+                majorSxId = s5.executeUpdate(makeSymptomsQuery(newCase.hasMajorSx, newCase.hasNotMajorSx));
+            }
+            if (newCase.hasMinorSx.size() == 0 && newCase.hasNotMinorSx.size() == 0) {
+                minorSxId = s6.executeUpdate(makeSymptomsQuery(newCase.hasMinorSx, newCase.hasNotMinorSx));
+            }
 
             System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
-
-            int majorSxId = s5.executeUpdate(makeSymptomsQuery(newCase.hasMajorSx, newCase.hasNotMajorSx));
-            int minorSxId = s6.executeUpdate(makeSymptomsQuery(newCase.hasMinorSx, newCase.hasNotMinorSx));
-
-
+            
             String query = "INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (";
             query += dId + ", " + newCase.age + ", '" + newCase.gender + "', " + majorSxId + ", " + minorSxId + ", " + painId + ");";
             System.out.println(query);
