@@ -14,6 +14,7 @@ public class CBR {
     private ArrayList<Case> baseCases = null;
     private Repo repo;
     private Case currCase;
+    private ArrayList<Case> ddxList = new ArrayList<Case>();
 
     double majorRating = 5.0;
     double minorRating = 2.0;
@@ -23,13 +24,14 @@ public class CBR {
 
     private int similarityLimit = 4;
 
-    public CBR(Case currCase, Repo repo) {
+    public CBR(Repo repo) {
         this.repo = repo;
-        this.baseCases = repo.getBaseCases(currCase);
-        this.currCase = currCase;
     }
 
-    public ArrayList<Case> findDiagnosis() {
+    public ArrayList<String> findDiagnosis(Case currCase) {
+        this.baseCases = repo.getBaseCases(currCase);
+        this.currCase = currCase;
+
         Comparator<Diagnosis> compare = new DiagnosisComparator();
         PriorityQueue<Diagnosis> ddxQueue = new PriorityQueue<>(10, compare);
 
@@ -41,14 +43,50 @@ public class CBR {
             }
         }
 
-        ArrayList<Case> ddxList = new ArrayList<>();
+        ArrayList<String> ddxDiagnoses = new ArrayList<String>();
 
         for (Diagnosis ddx : ddxQueue) {
-            if (!ddxList.contains(ddx.getDiagnosisName())){
+            if (!ddxDiagnoses.contains(ddx.getDiagnosisName())){
                 ddxList.add(ddx.getCase());
+                ddxDiagnoses.add(ddx.getDiagnosisName());
             }
         }
-        return ddxList;
+        return ddxDiagnoses;
+    }
+
+    public Case reviseCase(Case currentCase) {
+        Case similiarCase = null;
+        for (Case c : ddxList) {
+            if (currentCase.diagnosis.equals(c.diagnosis)) {
+                similiarCase = c;
+            }
+        }
+        if (similiarCase == null) {
+            return currentCase;
+        }
+
+        Case revisedCase = new Case();
+        revisedCase.setDiagnosis(currentCase.diagnosis);
+        revisedCase.setGender(currentCase.gender);
+        revisedCase.setAge(currentCase.age);
+        revisedCase.pain = currentCase.pain;
+        for (Integer symptom : currentCase.hasMajorSx) {
+            if (similiarCase.hasMajorSx.contains(symptom)) {
+                revisedCase.hasMajorSx.add(symptom);
+            }
+            else {
+                revisedCase.hasMinorSx.add(symptom);
+            }
+        }
+        for (Integer symptom : currentCase.hasNotMajorSx) {
+            if (similiarCase.hasNotMajorSx.contains(symptom)) {
+                revisedCase.hasNotMajorSx.add(symptom);
+            }
+            else {
+                revisedCase.hasNotMinorSx.add(symptom);
+            }
+        }
+        return revisedCase;
     }
 
     private double compareCases(Case oldCase) {

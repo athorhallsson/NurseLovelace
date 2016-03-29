@@ -22,11 +22,26 @@ public class WebUI implements SparkApplication {
 
     @Override
     public void init() {
-        final Repo repo = new Repo();
+        Repo repo = new Repo();
 
         QuestionSearch qSearch = new QuestionSearch(repo);
 
+        CBR cbr = new CBR(repo);
+
         Case currentCase = new Case();
+
+        currentCase.setAge(9);
+        currentCase.setGender('M');
+        currentCase.setDiagnosis("Bla");
+        currentCase.hasMinorSx.add(2);
+        currentCase.hasMajorSx.add(3);
+        currentCase.hasNotMajorSx.add(4);
+        currentCase.hasNotMinorSx.add(5);
+        currentCase.pain.painInfo.add(1);
+        currentCase.pain.position.add(2);
+        currentCase.pain.rPosition.add(3);
+
+        repo.addCase(currentCase);
 
         // POST
 
@@ -92,13 +107,9 @@ public class WebUI implements SparkApplication {
             if (answer == null) {
                 return response;
             }
-            else if (answer.equals("true")) {
-                repo.addCase(currentCase);
-            }
-            else {
-                currentCase.setDiagnosis(answer);
-                repo.addCase(currentCase);
-            }
+            currentCase.setDiagnosis(answer);
+            Case revisedCase = cbr.reviseCase(currentCase);
+            repo.addCase(revisedCase);
             response.status(200);
             return response;
         });
@@ -106,11 +117,8 @@ public class WebUI implements SparkApplication {
         // GET
 
         get("/done", (request, response) -> {
-            CBR cbr = new CBR(currentCase, repo);
-            ArrayList<Case> ddxList = cbr.findDiagnosis();
-            //currentCase.setDiagnosis(diagnosis);
             response.status(200);
-            /// Andri h'er /arf a[ b;ta vi[ 
+            ArrayList<String> ddxList = cbr.findDiagnosis(currentCase);
             String ddxString = new Gson().toJson(ddxList);
             return ddxString;
         });
