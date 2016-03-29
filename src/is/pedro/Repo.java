@@ -153,7 +153,6 @@ public class Repo {
         Statement s6;
         Statement s7;
         try {
-            int dId;
             s1 = c.createStatement();
             s2 = c.createStatement();
             s3 = c.createStatement();
@@ -162,22 +161,26 @@ public class Repo {
             s6 = c.createStatement();
             s7 = c.createStatement();
 
-            String diagnosisQuery = "SELECT d.dId FROM Diagnosis d WHERE d.dname='" + newCase.diagnosis + "';";
-            System.out.println(diagnosisQuery);
-            ResultSet rs1 = s1.executeQuery(diagnosisQuery);
-            // Check if there is an existing diagnosis
-            if (rs1.next()) {
-                dId = rs1.getInt("dId");
-            }
-            else {
-                dId = s1.executeUpdate("INSERT INTO Diagnosis (dname) VALUES ('" + newCase.diagnosis + "');", Statement.RETURN_GENERATED_KEYS);
-            }
-
+            int dId;
             int posId = 0;
             int rPosId = 0;
             int painId = 0;
             int majorSxId = 0;
             int minorSxId = 0;
+
+            // Check if there is an existing diagnosis
+            String diagnosisQuery = "SELECT d.dId FROM Diagnosis d WHERE d.dname='" + newCase.diagnosis + "';";
+            ResultSet rs0 = s1.executeQuery(diagnosisQuery);
+            if (rs0.next()) {
+                dId = rs0.getInt("dId");
+            }
+            else {
+                dId = s1.executeUpdate("INSERT INTO Diagnosis (dname) VALUES ('" + newCase.diagnosis + "');", Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs1 = s1.getGeneratedKeys();
+                if (rs1.next()) {
+                    dId = rs1.getInt(1);
+                }
+            }
 
             if (newCase.pain.position.size() != 0) {
                 s2.executeUpdate(makePositionQuery(newCase.pain.position), Statement.RETURN_GENERATED_KEYS);
@@ -186,7 +189,7 @@ public class Repo {
                     posId = rs2.getInt(1);
                 }
             }
-            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
+
             if (newCase.pain.rPosition.size() != 0) {
                 s3.executeUpdate(makePositionQuery(newCase.pain.rPosition), Statement.RETURN_GENERATED_KEYS);
                 ResultSet rs3 = s3.getGeneratedKeys();
@@ -194,7 +197,7 @@ public class Repo {
                     rPosId = rs3.getInt(1);
                 }
             }
-            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
+
             if (newCase.pain.painInfo.size() != 0) {
                 s4.executeUpdate(makePainQuery(newCase.pain.painInfo, posId, rPosId), Statement.RETURN_GENERATED_KEYS);
                 ResultSet rs4 = s4.getGeneratedKeys();
@@ -202,23 +205,24 @@ public class Repo {
                     painId = rs4.getInt(1);
                 }
             }
-            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
+
             if (newCase.hasMajorSx.size() != 0 && newCase.hasNotMajorSx.size() != 0) {
+
                 s5.executeUpdate(makeSymptomsQuery(newCase.hasMajorSx, newCase.hasNotMajorSx));
-                ResultSet rs5 = s5.getGeneratedKeys();
+                ResultSet rs5 = s5.executeQuery("SELECT MAX(sxid) FROM Symptoms");
                 if (rs5.next()) {
                     majorSxId = rs5.getInt(1);
                 }
             }
-            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
+
             if (newCase.hasMinorSx.size() != 0 && newCase.hasNotMinorSx.size() != 0) {
+
                 s6.executeUpdate(makeSymptomsQuery(newCase.hasMinorSx, newCase.hasNotMinorSx));
-                ResultSet rs6 = s6.getGeneratedKeys();
+                ResultSet rs6 = s6.executeQuery("SELECT MAX(sxid) FROM Symptoms");
                 if (rs6.next()) {
                     minorSxId = rs6.getInt(1);
                 }
             }
-            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
             
             String query = "INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (";
             query += dId + ", " + newCase.age + ", '" + newCase.gender + "', " + majorSxId + ", " + minorSxId + ", " + painId + ");";
@@ -279,14 +283,11 @@ public class Repo {
         for (Integer rPos : currCase.pain.rPosition) {
             query += " AND rpos." + painPos.get(rPos) + "=" + value;
         }
-
-        //System.out.println(query);
         return getFromCases(query);
     }
 
     public ArrayList<Case> getCasesWithSymtom(int symptom, boolean value) {
         String query = joinQuery + "WHERE major." + symptoms.get(symptom) + "=" + value + " OR minor." + symptoms.get(symptom) + "=" + value;
-       // System.out.println(query);
         return getFromCases(query);
     }
 
@@ -296,8 +297,6 @@ public class Repo {
         try {
             s = c.createStatement();
             ResultSet rs = s.executeQuery(query);
-
-            //int size = rs.getMetaData().getColumnCount() - 2;
 
             while (rs.next()) {
                 HashSet<Integer> hasMajorSx = new HashSet<Integer>();
