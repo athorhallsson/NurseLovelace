@@ -60,9 +60,7 @@ public class Repo {
     private void connectToDb() {
         try {
             Class.forName("org.postgresql.Driver");
-            c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/diagnosisdb",
-                            "postgres", "nopassword");
+            c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/diagnosisdb", "postgres", "nopassword");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());
@@ -71,38 +69,32 @@ public class Repo {
     }
 
     private String makePositionQuery(HashSet<Integer> hs) {
-
         StringBuilder query = new StringBuilder("INSERT INTO Positions (");
         for (Iterator<Integer> i = hs.iterator(); i.hasNext();) {
             Integer posIndex = i.next();
             query.append(painPos.get(posIndex));
-            if (i.hasNext() || hs.size() != 0) {
+            if (i.hasNext()) {
                 query.append(", ");
             }
         }
-       query.append(") VALUES (");
+        query.append(") VALUES (");
 
         for (int i = 0; i < hs.size(); i++) {
             query.append("true");
-            if (i == hs.size() - 1) {
-                if (hs.size() != 0) {
-                    query.append(", ");
-                }
-            }
-            else {
+            if (i != hs.size() - 1) {
                 query.append(", ");
             }
         }
+        query.append(")");
         return query.toString();
     }
 
     private String makePainQuery(HashSet<Integer> hs, Integer posId, Integer rPosId) {
-
         StringBuilder query = new StringBuilder("INSERT INTO Pain (positionId, referred_pain_position, ");
         for (Iterator<Integer> i = hs.iterator(); i.hasNext();) {
             Integer posIndex = i.next();
             query.append(painSx.get(posIndex));
-            if (i.hasNext() || hs.size() != 0) {
+            if (i.hasNext()) {
                 query.append(", ");
             }
         }
@@ -110,32 +102,27 @@ public class Repo {
 
         for (int i = 0; i < hs.size(); i++) {
             query.append("true");
-            if (i == hs.size() - 1) {
-                if (hs.size() != 0) {
-                    query.append(", ");
-                }
-            }
-            else {
+            if (i != hs.size() - 1) {
                 query.append(", ");
             }
         }
+        query.append(")");
         return query.toString();
     }
 
     private String makeSymptomsQuery(HashSet<Integer> tSet, HashSet<Integer> fSet) {
-
         StringBuilder query = new StringBuilder("INSERT INTO Symptoms (");
         for (Iterator<Integer> i = tSet.iterator(); i.hasNext();) {
             Integer posIndex = i.next();
-            query.append(painSx.get(posIndex));
-            if (i.hasNext() || tSet.size() != 0) {
+            query.append(symptoms.get(posIndex));
+            if (i.hasNext() || fSet.size() != 0) {
                 query.append(", ");
             }
         }
         for (Iterator<Integer> i = fSet.iterator(); i.hasNext();) {
             Integer posIndex = i.next();
-            query.append(painSx.get(posIndex));
-            if (i.hasNext() || fSet.size() != 0) {
+            query.append(symptoms.get(posIndex));
+            if (i.hasNext()) {
                 query.append(", ");
             }
         }
@@ -143,26 +130,17 @@ public class Repo {
 
         for (int i = 0; i < tSet.size(); i++) {
             query.append("true");
-            if (i == tSet.size() - 1) {
-                if (tSet.size() != 0) {
-                    query.append(", ");
-                }
-            }
-            else {
+            if (i != tSet.size() - 1 || fSet.size() != 0) {
                 query.append(", ");
             }
         }
         for (int i = 0; i < fSet.size(); i++) {
             query.append("false");
-            if (i == fSet.size() - 1) {
-                if (fSet.size() != 0) {
-                    query.append(", ");
-                }
-            }
-            else {
+            if (i != fSet.size() - 1) {
                 query.append(", ");
             }
         }
+        query.append(")");
         return query.toString();
     }
 
@@ -185,6 +163,7 @@ public class Repo {
             s7 = c.createStatement();
 
             String diagnosisQuery = "SELECT d.dId FROM Diagnosis d WHERE d.dname='" + newCase.diagnosis + "';";
+            System.out.println(diagnosisQuery);
             ResultSet rs1 = s1.executeQuery(diagnosisQuery);
             // Check if there is an existing diagnosis
             if (rs1.next()) {
@@ -194,17 +173,56 @@ public class Repo {
                 dId = s1.executeUpdate("INSERT INTO Diagnosis (dname) VALUES ('" + newCase.diagnosis + "');", Statement.RETURN_GENERATED_KEYS);
             }
 
-            int posId = s2.executeUpdate(makePositionQuery(newCase.pain.position), Statement.RETURN_GENERATED_KEYS);
-            int rPosId = s3.executeUpdate(makePositionQuery(newCase.pain.rPosition), Statement.RETURN_GENERATED_KEYS);
-            int painId = s4.executeUpdate(makePainQuery(newCase.pain.painInfo, posId, rPosId), Statement.RETURN_GENERATED_KEYS);
+            int posId = 0;
+            int rPosId = 0;
+            int painId = 0;
+            int majorSxId = 0;
+            int minorSxId = 0;
 
-            int majorSxId = s5.executeUpdate(makeSymptomsQuery(newCase.hasMajorSx, newCase.hasNotMajorSx));
-            int minorSxId = s6.executeUpdate(makeSymptomsQuery(newCase.hasMinorSx, newCase.hasNotMinorSx));
-
-
-
+            if (newCase.pain.position.size() != 0) {
+                s2.executeUpdate(makePositionQuery(newCase.pain.position), Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs2 = s2.getGeneratedKeys();
+                if (rs2.next()) {
+                    posId = rs2.getInt(1);
+                }
+            }
+            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
+            if (newCase.pain.rPosition.size() != 0) {
+                s3.executeUpdate(makePositionQuery(newCase.pain.rPosition), Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs3 = s3.getGeneratedKeys();
+                if (rs3.next()) {
+                    rPosId = rs3.getInt(1);
+                }
+            }
+            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
+            if (newCase.pain.painInfo.size() != 0) {
+                s4.executeUpdate(makePainQuery(newCase.pain.painInfo, posId, rPosId), Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs4 = s4.getGeneratedKeys();
+                if (rs4.next()) {
+                    painId = rs4.getInt(1);
+                }
+            }
+            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
+            if (newCase.hasMajorSx.size() != 0 && newCase.hasNotMajorSx.size() != 0) {
+                s5.executeUpdate(makeSymptomsQuery(newCase.hasMajorSx, newCase.hasNotMajorSx));
+                ResultSet rs5 = s5.getGeneratedKeys();
+                if (rs5.next()) {
+                    majorSxId = rs5.getInt(1);
+                }
+            }
+            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
+            if (newCase.hasMinorSx.size() != 0 && newCase.hasNotMinorSx.size() != 0) {
+                s6.executeUpdate(makeSymptomsQuery(newCase.hasMinorSx, newCase.hasNotMinorSx));
+                ResultSet rs6 = s6.getGeneratedKeys();
+                if (rs6.next()) {
+                    minorSxId = rs6.getInt(1);
+                }
+            }
+            System.out.println("posId: " + posId + " rPosId: " + rPosId + " painid: " + painId);
+            
             String query = "INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (";
             query += dId + ", " + newCase.age + ", '" + newCase.gender + "', " + majorSxId + ", " + minorSxId + ", " + painId + ");";
+            System.out.println(query);
             s7.executeUpdate(query);
 
             s1.close();
