@@ -21,7 +21,7 @@ public class CBR {
     double posRating = 5.0;
     double rPosRating = 3.0;
 
-    private int similarityLimit = 8;
+    private int similarityLimit = 4;
 
     public CBR(Case currCase, Repo repo) {
         this.repo = repo;
@@ -29,7 +29,7 @@ public class CBR {
         this.currCase = currCase;
     }
 
-    public ArrayList<String> findDiagnosis() {
+    public ArrayList<Case> findDiagnosis() {
         Comparator<Diagnosis> compare = new DiagnosisComparator();
         PriorityQueue<Diagnosis> ddxQueue = new PriorityQueue<>(10, compare);
 
@@ -37,18 +37,18 @@ public class CBR {
             double similarityIndex = compareCases(oldCase);
 
             if (similarityIndex >= similarityLimit) {
-                ddxQueue.add(new Diagnosis(oldCase.diagnosis, similarityIndex));
+                ddxQueue.add(new Diagnosis(oldCase, similarityIndex));
             }
         }
 
-        ArrayList<String> ddxStrings = new ArrayList<>();
+        ArrayList<Case> ddxList = new ArrayList<>();
 
         for (Diagnosis ddx : ddxQueue) {
-            if (!ddxStrings.contains(ddx.getDiagnosisName())){
-                ddxStrings.add(ddx.getDiagnosisName());
+            if (!ddxList.contains(ddx.getDiagnosisName())){
+                ddxList.add(ddx.getCase());
             }
         }
-        return ddxStrings;
+        return ddxList;
     }
 
     private double compareCases(Case oldCase) {

@@ -8,14 +8,15 @@ import java.util.Comparator;
  */
 public class Diagnosis {
 
-    private String diagnosisName;
+    private Case c;
     private double similarityIndex;
 
-    public Diagnosis (String name, double similarityIndex) {
-        this.diagnosisName = name;
+    public Diagnosis (Case oldCase, double similarityIndex) {
+        this.c = oldCase;
         this.similarityIndex = similarityIndex;
     }
 
     public double getSimilarityIndex() { return this.similarityIndex; }
-    public String getDiagnosisName() { return this.diagnosisName; }
+    public String getDiagnosisName() { return this.c.diagnosis; }
+    public Case getCase() { return this.c; }
 }

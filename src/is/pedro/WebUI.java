@@ -107,9 +107,10 @@ public class WebUI implements SparkApplication {
 
         get("/done", (request, response) -> {
             CBR cbr = new CBR(currentCase, repo);
-            ArrayList<String> ddxList = cbr.findDiagnosis();
+            ArrayList<Case> ddxList = cbr.findDiagnosis();
             //currentCase.setDiagnosis(diagnosis);
             response.status(200);
+            /// Andri h'er /arf a[ b;ta vi[ 
             String ddxString = new Gson().toJson(ddxList);
             return ddxString;
         });
