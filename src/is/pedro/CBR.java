@@ -1,5 +1,7 @@
 package is.pedro;
 
+import sun.tools.tree.ThisExpression;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -19,7 +21,7 @@ public class CBR {
     double posRating = 5.0;
     double rPosRating = 3.0;
 
-    private int similarityLimit = 3;
+    private int similarityLimit = 8;
 
     public CBR(Case currCase, Repo repo) {
         this.repo = repo;
@@ -50,15 +52,12 @@ public class CBR {
     }
 
     private double compareCases(Case oldCase) {
-        HashSet major = this.currCase.hasMajorSx;
-        // All symptoms are regarded major until doctor has confirmed diagnosis
-        HashSet minor = this.currCase.hasMajorSx;
-        HashSet pain = this.currCase.pain.painInfo;
-        HashSet pos = this.currCase.pain.position;
-        HashSet rPos = this.currCase.pain.rPosition;
-
-        System.out.println(oldCase.caseToString(repo.symptoms, repo.painSx, repo.painPos));
-        System.out.println(this.currCase.caseToString(repo.symptoms, repo.painSx, repo.painPos));
+        HashSet major = (HashSet)this.currCase.hasMajorSx.clone();
+        // Remember that all sx in currCase are major until doctor stratifies
+        HashSet minor = (HashSet)this.currCase.hasMajorSx.clone();
+        HashSet pain = (HashSet)this.currCase.pain.painInfo.clone();
+        HashSet pos = (HashSet)this.currCase.pain.position.clone();
+        HashSet rPos = (HashSet)this.currCase.pain.rPosition.clone();
 
         major.retainAll(oldCase.hasMajorSx);
         minor.retainAll(oldCase.hasMinorSx);
@@ -66,35 +65,23 @@ public class CBR {
         pos.retainAll(oldCase.pain.position);
         rPos.retainAll(oldCase.pain.rPosition);
 
-        System.out.println(oldCase.caseToString(repo.symptoms, repo.painSx, repo.painPos));
-        System.out.println(this.currCase.caseToString(repo.symptoms, repo.painSx, repo.painPos));
-
         double similarityIndex = 0.0;
 
         if (this.currCase.hasMajorSx.size() != 0) {
             similarityIndex += majorRating * (((double)major.size()) / (double)this.currCase.hasMajorSx.size());
-            System.out.println(similarityIndex);
         }
         if (this.currCase.hasMajorSx.size() != 0) {
             similarityIndex += minorRating * (((double)minor.size()) / (double)this.currCase.hasMajorSx.size());
-            System.out.println(similarityIndex);
-
         }
         if (this.currCase.pain.painInfo.size() != 0) {
             similarityIndex += painRating * (((double)pain.size()) / (double)this.currCase.pain.painInfo.size());
-            System.out.println(similarityIndex);
-
         }
         if (this.currCase.pain.position.size() != 0) {
             similarityIndex += posRating * (((double)pos.size()) / (double)this.currCase.pain.position.size());
-            System.out.println(similarityIndex);
-
         }
         if (this.currCase.pain.rPosition.size() != 0) {
             similarityIndex += rPosRating * (((double)rPos.size()) / (double)this.currCase.pain.rPosition.size());
         }
-
-        //System.out.println(oldCase.caseToString(repo.symptoms, repo.painSx, repo.painPos) + " " + similarityIndex);
         // Add age and gender rating....
 
         return similarityIndex;

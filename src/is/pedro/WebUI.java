@@ -110,7 +110,6 @@ public class WebUI implements SparkApplication {
             //currentCase.setDiagnosis(diagnosis);
             response.status(200);
             String ddxString = new Gson().toJson(ddxList);
-            System.out.println(ddxString.toString());
             return ddxString;
         });
 
