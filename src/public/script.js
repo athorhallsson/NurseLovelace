@@ -147,8 +147,10 @@ $(document).ready(function() {
                     data: null,
                     success : function(text)
                     {
-                        var obj = JSON.parse(text); 
-                        $("#diagnosis").html(obj.diagnosis);
+                        var obj = JSON.parse(text);
+                        for (var ddx in obj) {
+                            $("#diagnosis").append('<p><input type="checkbox" name="' + obj[ddx] + '" id="' + obj[ddx] + '"/><label for="' + obj[ddx] + '">' + obj[ddx] + '</label></p>');
+                        }
                     }
                 }).done(function() {
                     $("#results").html('We really hope it is.').attr('class', 'alert alert-success');

@@ -5,6 +5,8 @@ package is.pedro;
  */
 
 import static spark.Spark.*;
+
+import com.google.gson.Gson;
 import spark.servlet.SparkApplication;
 
 import java.util.ArrayList;
@@ -104,14 +106,12 @@ public class WebUI implements SparkApplication {
 
         get("/done", (request, response) -> {
             CBR cbr = new CBR(currentCase, repo);
-            ArrayList<Case> ddxList = cbr.findDiagnosis();
+            ArrayList<String> ddxList = cbr.findDiagnosis();
             //currentCase.setDiagnosis(diagnosis);
             response.status(200);
-            StringBuilder ddxString = new StringBuilder();
-            for (Case ddx : ddxList) {
-                ddxString.append(ddx.diagnosis + "\n");
-            }
-            return "{ \"diagnosis\":\""+ ddxString +"\" }";
+            String ddxString = new Gson().toJson(ddxList);
+            System.out.println(ddxString.toString());
+            return ddxString;
         });
 
         get("/symptoms", (request, response) -> {

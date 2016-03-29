@@ -65,7 +65,7 @@ public class Case {
             stb.append(painSx.get(pSx) + " ");
         }
         for (Integer p : pain.position) {
-            stb.append(pos.get(p) + " " + p + " ");
+            stb.append(pos.get(p) + " ");
         }
         for (Integer rp : pain.rPosition) {
             stb.append(pos.get(rp) + " ");

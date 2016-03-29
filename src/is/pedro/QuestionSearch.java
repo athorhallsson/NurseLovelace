@@ -19,7 +19,7 @@ public class QuestionSearch {
     public void initSearch(Case currCase) {
 
         ArrayList<Case> pCases = repo.getInitCases(currCase);
-        System.out.println(pCases.size());
+        // System.out.println(pCases.size());
         for (int i = 0; i < repo.numberOfSymptoms(); i++) {
             questionArray.add(new QuestionNode(i));
         }
