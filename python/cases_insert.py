@@ -32,8 +32,8 @@ for i in range(len(diseases)):
         min += 5
     
     # Diagnosis
-    diagnosis = lines[0].split()
-    diagnosisQuery = "Insert INTO Diagnosis (dId, dname) Values (" + str(diagnosisId) + ", '" + diagnosis[0] + "');\n"
+    diagnosis = lines[0].rstrip()
+    diagnosisQuery = "Insert INTO Diagnosis (dId, dname) Values (" + str(diagnosisId) + ", '" + diagnosis + "');\n"
     f_new.write(diagnosisQuery)
     
     

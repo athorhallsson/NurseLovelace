@@ -88,6 +88,7 @@ public class WebUI implements SparkApplication {
 
         post("/confirm", (request, response) -> {
             String answer = request.queryParams("answer");
+            System.out.println(answer);
             if (answer == null) {
                 return response;
             }

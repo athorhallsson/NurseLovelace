@@ -89,12 +89,11 @@ $(document).ready(function() {
             };
 
             $("#confirm-true").on('click', function(e) {
-                confirmCallAction("true");
-            });
-
-            $("#confirm-false").on('click', function(e) {
-                $("#confirm").hide();
-                $("#correct-diagnosis").show();
+                if ($("#none-of-the-above").prop("checked")) {
+                    $("#confirm").hide();
+                    $("#correct-diagnosis").show();
+                }
+                confirmCallAction($("#hidden-input").val());
             });
 
             $("#correct-diagnosis-btn").on('click', function(e) {
@@ -148,9 +147,14 @@ $(document).ready(function() {
                     success : function(text)
                     {
                         var obj = JSON.parse(text);
+                        var counter = 0;
                         for (var ddx in obj) {
-                            $("#diagnosis").append('<p><input type="checkbox" name="' + obj[ddx] + '" id="' + obj[ddx] + '"/><label for="' + obj[ddx] + '">' + obj[ddx] + '</label></p>');
+                            counter++
+                            $("#diagnosis").append('<p><input type="checkbox" name=ddx"' + counter + '" id=ddx"' + counter + '" value="' + obj[ddx] + '"/><label for=ddx"' + counter + '">  ' + obj[ddx] + '</label></p>');
                         }
+                        $("input").on("click", function() {
+                             $("#hidden-input").val($(this).val());
+                        })
                     }
                 }).done(function() {
                     $("#results").html('We really hope it is.').attr('class', 'alert alert-success');

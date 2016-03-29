@@ -599,7 +599,7 @@ INSERT INTO Pain (pid, positionId, referred_pain_position, constant, four_hours,
 INSERT INTO Symptoms (sxId, fever, nausea, loss_of_appetite) VALUES (200, true, true, true);
 INSERT INTO Symptoms (sxId, vomiting, diarrhea, chills, malaise, abdominal_distension, dysuria) VALUES (201, true, true, true, true, false, true);
 INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (1, 105, 'M', 200, 201, 200);
-Insert INTO Diagnosis (dId, dname) Values (2, 'Biliary');
+Insert INTO Diagnosis (dId, dname) Values (2, 'Biliary Colic');
 INSERT INTO Positions (posId, right_upper_quadrant, epigastrium) VALUES (202, true, true);
 INSERT INTO Positions (posId, right_shoulder_blade) VALUES (203, false);
 INSERT INTO Pain (pid, positionId, referred_pain_position, sharp, pleuritic, constant, four_hours, eight_hours, worse_with_breathing, worse_with_eating) VALUES (202, 202, 203, true, true, true, false, true, true, true);
@@ -3003,7 +3003,7 @@ INSERT INTO Pain (pid, positionId, referred_pain_position, dull, constant, four_
 INSERT INTO Symptoms (sxId, fever, loss_of_appetite) VALUES (1000, true, true);
 INSERT INTO Symptoms (sxId, bloating, constipation, diarrhea, indigestion, nausea, vomiting, chills) VALUES (1001, false, true, true, true, true, true, true);
 INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (5, 101, 'F', 1000, 1001, 1000);
-Insert INTO Diagnosis (dId, dname) Values (6, 'Urinary');
+Insert INTO Diagnosis (dId, dname) Values (6, 'Urinary tract infection (upper)');
 INSERT INTO Positions (posId, left_costovertebral, right_costovertebral, left_flank, right_flank, pelvic, suprapubic) VALUES (1002, true, true, true, true, true, true);
 INSERT INTO Positions (posId, left_groin, right_groin) VALUES (1003, false, true);
 INSERT INTO Pain (pid, positionId, referred_pain_position, dysuria, dull, constant, four_hours, eight_hours, one_day, two_days) VALUES (1002, 1002, 1003, true, true, true, true, true, true, true);
@@ -3604,7 +3604,7 @@ INSERT INTO Pain (pid, positionId, referred_pain_position, dysuria, dull, consta
 INSERT INTO Symptoms (sxId, polyuria, hematuria, fever) VALUES (1200, true, true, true);
 INSERT INTO Symptoms (sxId, fatigue, malaise, nausea, vomiting, hypotension, tachycardia, cloudy_urine, smelly_urine, sense_of_incomplete_bladder_emptying) VALUES (1201, true, true, false, true, true, true, true, true, true);
 INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (6, 104, 'M', 1200, 1201, 1200);
-Insert INTO Diagnosis (dId, dname) Values (7, 'Urinary');
+Insert INTO Diagnosis (dId, dname) Values (7, 'Urinary tract infection (lower)');
 INSERT INTO Positions (posId, pelvic, suprapubic) VALUES (1202, false, true);
 INSERT INTO Positions (posId, lower_back) VALUES (1203, true);
 INSERT INTO Pain (pid, positionId, referred_pain_position, dysuria, dysparenunia, four_hours, eight_hours, one_day, two_days) VALUES (1202, 1202, 1203, false, false, false, true, false, true);
@@ -4806,7 +4806,7 @@ INSERT INTO Pain (pid, positionId, referred_pain_position, dysuria, sharp, colic
 INSERT INTO Symptoms (sxId, nausea, hematuria) VALUES (1600, true, true);
 INSERT INTO Symptoms (sxId, polyuria, diaphoresis, vomiting) VALUES (1601, true, true, true);
 INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (8, 102, 'M', 1600, 1601, 1600);
-Insert INTO Diagnosis (dId, dname) Values (9, 'Acute');
+Insert INTO Diagnosis (dId, dname) Values (9, 'Acute upper respiratory tract infection');
 INSERT INTO Positions (posId, head, throat, maxilar_sinuses, frontal_sinuses) VALUES (1602, true, true, true, true);
 INSERT INTO Positions (posId) VALUES (1603);
 INSERT INTO Pain (pid, positionId, referred_pain_position, four_hours, eight_hours, one_day, two_days, one_week, worse_with_bending_forward) VALUES (1602, 1602, 1603, true, true, true, true, true, true);
@@ -5407,7 +5407,7 @@ INSERT INTO Pain (pid, positionId, referred_pain_position, four_hours, eight_hou
 INSERT INTO Symptoms (sxId, cough, dry_cough, productive_cough, fever, rhinitis) VALUES (1800, true, true, true, true, true);
 INSERT INTO Symptoms (sxId, fatigue, malaise, loss_of_appetite, dehydration, diaphoresis, shortness_of_breath, conjunctivitis, chills) VALUES (1801, true, true, true, true, true, true, true, true);
 INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (9, 105, 'F', 1800, 1801, 1800);
-Insert INTO Diagnosis (dId, dname) Values (10, 'Heart');
+Insert INTO Diagnosis (dId, dname) Values (10, 'Heart attack');
 INSERT INTO Positions (posId, chest, left_chest, right_chest) VALUES (1802, false, true, true);
 INSERT INTO Positions (posId, jaw, neck, left_shoulder, left_shoulder_blade, left_arm) VALUES (1803, true, true, true, true, true);
 INSERT INTO Pain (pid, positionId, referred_pain_position, clenching, burning, on_rest, on_exertion, four_hours, eight_hours, one_day, better_with_rest, worse_with_moving_around) VALUES (1802, 1802, 1803, true, false, true, true, true, true, true, true, true);
@@ -6609,7 +6609,7 @@ INSERT INTO Pain (pid, positionId, referred_pain_position, sharp, pleuritic, wor
 INSERT INTO Symptoms (sxId, cough, productive_cough, hemoptysis, fever, shortness_of_breath, tachypnea) VALUES (2200, true, true, true, true, true, true);
 INSERT INTO Symptoms (sxId, dehydration, fatigue, loss_of_appetite, malaise, diaphoresis, chills, tachycardia) VALUES (2201, true, false, true, true, true, true, false);
 INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (11, 101, 'M', 2200, 2201, 2200);
-Insert INTO Diagnosis (dId, dname) Values (12, 'Crohns');
+Insert INTO Diagnosis (dId, dname) Values (12, 'Crohns disease');
 INSERT INTO Positions (posId, anal, left_lower_quadrant, right_lower_quadrant, periumbilical, suprapubic, pelvic) VALUES (2202, true, true, true, true, true, true);
 INSERT INTO Positions (posId, lower_back) VALUES (2203, true);
 INSERT INTO Pain (pid, positionId, referred_pain_position, dull, four_hours, eight_hours, one_day, two_days, one_week, one_month, six_months, worse_with_eating) VALUES (2202, 2202, 2203, true, true, true, true, true, true, true, true, true);
@@ -7210,7 +7210,7 @@ INSERT INTO Pain (pid, positionId, referred_pain_position, dull, four_hours, eig
 INSERT INTO Symptoms (sxId, hematochesia, melena, diarrhea, fever) VALUES (2400, true, true, true, true);
 INSERT INTO Symptoms (sxId, bloating, constipation, weight_loss, fatigue, loss_of_appetite, nausea, vomiting, abdominal_distension) VALUES (2401, false, true, true, false, true, true, true, true);
 INSERT INTO Cases (diagnosisId, age, gender, majorSx, minorSx, painId) VALUES (12, 104, 'F', 2400, 2401, 2400);
-Insert INTO Diagnosis (dId, dname) Values (13, 'Ulcerative');
+Insert INTO Diagnosis (dId, dname) Values (13, 'Ulcerative colitis');
 INSERT INTO Positions (posId, anal, left_lower_quadrant, pelvic) VALUES (2402, true, true, true);
 INSERT INTO Positions (posId, lower_back) VALUES (2403, true);
 INSERT INTO Pain (pid, positionId, referred_pain_position, dull, four_hours, eight_hours, one_day, two_days, one_week, one_month, six_months, worse_with_eating) VALUES (2402, 2402, 2403, true, true, true, false, false, true, true, true, true);
