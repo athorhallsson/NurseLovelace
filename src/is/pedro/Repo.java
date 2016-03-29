@@ -228,7 +228,7 @@ public class Repo {
         String query = joinQuery;
         query += "WHERE c.gender = " + gender;
         query += " AND c.age BETWEEN " + ageMin + " AND " + ageMax;
-        System.out.println(query);
+        //System.out.println(query);
         return getFromCases(query);
     }
 
