@@ -207,7 +207,6 @@ public class Repo {
             }
 
             if (newCase.hasMajorSx.size() != 0 && newCase.hasNotMajorSx.size() != 0) {
-
                 s5.executeUpdate(makeSymptomsQuery(newCase.hasMajorSx, newCase.hasNotMajorSx));
                 ResultSet rs5 = s5.executeQuery("SELECT MAX(sxid) FROM Symptoms");
                 if (rs5.next()) {

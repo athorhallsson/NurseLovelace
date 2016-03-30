@@ -1,4 +1,44 @@
 button {
-    margin: 20px;
-    padding: 20 10px;
+    margin: 10px;
+    padding: 30 10px;
+    color: white;
+    background-color: rgb(120, 130, 150);
+    border-radius: 2px;
+    text-transform: capitalize;
+    font-weight: 400;
+    font-size: 17px;
+}
+
+* {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+#age {
+	margin-right: 20px;
+}
+
+#symptom {
+	margin-top: 15px;
+	margin-bottom: 15px;
+	font-size: 19px;
+	font-weight: 400;
+	text-transform: capitalize;
+}
+
+#main-symptom {
+	width: 350px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+input[type='checkbox'] {
+	margin-right: 10px;
+	margin-left: 5px;
+}
+
+#diagnosis p, #diagnosis + div {
+	font-size: 19px;
+	font-weight: 400;
+	text-transform: capitalize;
 }
