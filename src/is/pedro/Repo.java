@@ -206,7 +206,7 @@ public class Repo {
                 }
             }
 
-            if (newCase.hasMajorSx.size() != 0 && newCase.hasNotMajorSx.size() != 0) {
+            if (newCase.hasMajorSx.size() != 0 || newCase.hasNotMajorSx.size() != 0) {
 
                 s5.executeUpdate(makeSymptomsQuery(newCase.hasMajorSx, newCase.hasNotMajorSx));
                 ResultSet rs5 = s5.executeQuery("SELECT MAX(sxid) FROM Symptoms");
@@ -215,7 +215,7 @@ public class Repo {
                 }
             }
 
-            if (newCase.hasMinorSx.size() != 0 && newCase.hasNotMinorSx.size() != 0) {
+            if (newCase.hasMinorSx.size() != 0 || newCase.hasNotMinorSx.size() != 0) {
 
                 s6.executeUpdate(makeSymptomsQuery(newCase.hasMinorSx, newCase.hasNotMinorSx));
                 ResultSet rs6 = s6.executeQuery("SELECT MAX(sxid) FROM Symptoms");
@@ -264,8 +264,8 @@ public class Repo {
         }
 
         String query = joinQuery;
-        int ageMin = currCase.age - 10;
-        int ageMax = currCase.age + 10;
+        int ageMin = currCase.age - 15;
+        int ageMax = currCase.age + 15;
         String gender = "'" + currCase.gender + "'";
 
         query += "WHERE c.gender = " + gender;
@@ -273,15 +273,15 @@ public class Repo {
         query += "AND major." + symptoms.get(symptom) + "=" + value + " OR minor." + symptoms.get(symptom) + "=" + value;
 
         for (Integer pSx : currCase.pain.painInfo) {
-            query += " AND p." + painSx.get(pSx) + "=" + value;
+            query += " OR p." + painSx.get(pSx) + "=" + value;
         }
 
         for (Integer pPos : currCase.pain.position) {
-            query += " AND pos." + painPos.get(pPos) + "=" + value;
+            query += " OR pos." + painPos.get(pPos) + "=" + value;
         }
 
         for (Integer rPos : currCase.pain.rPosition) {
-            query += " AND rpos." + painPos.get(rPos) + "=" + value;
+            query += " OR rpos." + painPos.get(rPos) + "=" + value;
         }
         return getFromCases(query);
     }

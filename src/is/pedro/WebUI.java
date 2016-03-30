@@ -9,7 +9,10 @@ import static spark.Spark.*;
 import com.google.gson.Gson;
 import spark.servlet.SparkApplication;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.IntSummaryStatistics;
+import java.util.Iterator;
 
 public class WebUI implements SparkApplication {
 
@@ -29,19 +32,6 @@ public class WebUI implements SparkApplication {
         CBR cbr = new CBR(repo);
 
         Case currentCase = new Case();
-
-        currentCase.setAge(9);
-        currentCase.setGender('M');
-        currentCase.setDiagnosis("Bla");
-        currentCase.hasMinorSx.add(2);
-        currentCase.hasMajorSx.add(3);
-        currentCase.hasNotMajorSx.add(4);
-        currentCase.hasNotMinorSx.add(5);
-        currentCase.pain.painInfo.add(1);
-        currentCase.pain.position.add(2);
-        currentCase.pain.rPosition.add(3);
-
-        repo.addCase(currentCase);
 
         // POST
 
@@ -114,6 +104,36 @@ public class WebUI implements SparkApplication {
             return response;
         });
 
+        post("/addNewDiagnosis", (request, response) -> {
+            Case newCase = new Case();
+            String sxList = request.queryParams("majorSx");
+            String newDx = request.queryParams("newDx");
+
+            String[] arr = sxList.split(",");
+
+            for (String sx : arr) {
+                if (!sx.equals("")) {
+                    int sxInt = Integer.parseInt(sx);
+                    newCase.addToHas(sxInt);
+                }
+            }
+
+            for (Integer sx : currentCase.hasMajorSx) {
+                if (!newCase.hasMajorSx.contains(sx)) {
+                    newCase.addToHasMinor(sx);
+                }
+            }
+            newCase.age = currentCase.age;
+            newCase.gender = currentCase.gender;
+            newCase.hasNotMajorSx = currentCase.hasNotMajorSx;
+            newCase.hasNotMinorSx = currentCase.hasNotMinorSx;
+            newCase.pain = currentCase.pain;
+            newCase.diagnosis = newDx;
+            repo.addCase(newCase);
+            response.status(200);
+            return response;
+        });
+
         // GET
 
         get("/done", (request, response) -> {
@@ -135,6 +155,14 @@ public class WebUI implements SparkApplication {
                 }
             }
             return arr.toString();
+        });
+
+        get("/getSymptomsForCase", (request, response) -> {
+            ArrayList<Integer> sxList = new ArrayList<>();
+            for (Integer sx : currentCase.hasMajorSx) {
+                sxList.add(sx);
+            }
+            return new Gson().toJson(sxList);
         });
 
     }

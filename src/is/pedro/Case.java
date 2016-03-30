@@ -50,6 +50,8 @@ public class Case {
 
     public void addToHas(Integer symptom) { hasMajorSx.add(symptom); }
 
+    public void addToHasMinor(Integer symptom) { hasMinorSx.add(symptom); }
+
     public void addToHasNot (Integer symptom) { hasNotMajorSx.add(symptom); }
 
     public String caseToString(ArrayList<String> symptoms, ArrayList<String> painSx, ArrayList<String> pos) {

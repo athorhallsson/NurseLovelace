@@ -232,18 +232,20 @@
             <input type="hidden" id="hidden-input" value=""/>
             <h2>We think it's</h2>
             <div id="diagnosis"></div>
-            <input type="checkbox" name="none-of-the-above" id="none-of-the-above"/>
+            <input type="checkbox" name="none-of-the-above" id="none-of-the-above" value="none-of-the-above"/>
             <label for="none-of-the-above">None of the above</label>
-            <p>Please have your doctor check the correct diagnosis and press proceed<p>
             <div>
                 <button id="confirm-true">Proceed</button>
             </div>
         </div>
 
         <div class="container" id="correct-diagnosis">
-            <h2>Sorry</h2>
-            <p>Please enter correct diagnosis.<p>
+            <h2>Sorry this is not a known diagnosis to us</h2>
+            <p>Please have your doctor mark the the major symptoms</p>
+            <input type="hidden" id="hidden-majorSx" value=""/>
             <div>
+                <div id="sxList"></div>
+                <p>Please enter correct diagnosis.<p>
                 <input id="correct-diagnosis-text" type="text" placeholder="Please enter disease.."/>
                 <button id="correct-diagnosis-btn">Send</button>
             </div>

@@ -89,17 +89,21 @@ $(document).ready(function() {
             };
 
             $("#confirm-true").on('click', function(e) {
-                if ($("#none-of-the-above").prop("checked")) {
+                var checkboxValue = $("#hidden-input").val();
+
+                if (checkboxValue == "none-of-the-above") {
                     $("#confirm").hide();
-                    $("#correct-diagnosis").show();
+                    getAllSymptoms();
                 }
-                confirmCallAction($("#hidden-input").val());
+                else {
+                    confirmCallAction(checkboxValue);
+                }
             });
 
             $("#correct-diagnosis-btn").on('click', function(e) {
                 var newDiagnosis = $("#correct-diagnosis-text").val();
-                confirmCallAction(newDiagnosis);
-                $("#correct-diagnosis").hide();
+                var majorSxJson = $("#hidden-majorSx").val();
+                addNewDx(majorSxJson, newDiagnosis);
             });
 
             // QUESTION
@@ -189,4 +193,43 @@ $(document).ready(function() {
                 });
             });
 
+            function getAllSymptoms(){
+                $.ajax({
+                    type: "get",
+                    url: "/getSymptomsForCase",
+                    success : function(text)
+                    {
+                        var obj = JSON.parse(text)
+                        for (var ddx in obj) {
+                            $("#sxList").append('<p><input type="checkbox" name="' + symptoms[obj[ddx]] + '" id="' + symptoms[obj[ddx]] + '" value="' + obj[ddx] + '"/><label for="' + symptoms[obj[ddx]] + '">' + '  ' + symptoms[obj[ddx]] + '</label></p>');
+                        }
+                        $("input").on("click", function() {
+                             var prevValue = $("#hidden-majorSx").val();
+                             $("#hidden-majorSx").val(prevValue + $(this).val() + ',');
+                        })
+                    }
+                 }).done(function() {
+                     $("#results").html("Please have your doctor check the correct diagnosis and press proceed").attr('class', 'alert alert-success');
+                     $("#correct-diagnosis").show();
+                 }).fail(function() {
+                     $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
+                 });
+            };
+
+            function addNewDx(majorSx, newDx){
+                $.ajax({
+                    type: "post",
+                    url: "/addNewDiagnosis",
+                    data: 'majorSx=' + majorSx + '&newDx=' + newDx,
+                    success : function(text)
+                    {
+
+                    }
+                 }).done(function() {
+                     $("#results").html("Thank you").attr('class', 'alert alert-success');
+                     $("#correct-diagnosis").hide();
+                 }).fail(function() {
+                     $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
+                 });
+            };
         });
