@@ -16,13 +16,13 @@ public class CBR {
     private Case currCase;
     private ArrayList<Case> ddxList = new ArrayList<Case>();
 
-    double majorRating = 5.0;
+    double majorRating = 3.0;
     double minorRating = 2.0;
     double painRating = 3.0;
     double posRating = 5.0;
-    double rPosRating = 3.0;
+    double rPosRating = 4.0;
 
-    private int similarityLimit = 4;
+    private double similarityLimit = 4.1;
 
     public CBR(Repo repo) {
         this.repo = repo;
@@ -106,10 +106,10 @@ public class CBR {
         double similarityIndex = 0.0;
 
         if (this.currCase.hasMajorSx.size() != 0) {
-            similarityIndex += majorRating * (((double)major.size()) / (double)this.currCase.hasMajorSx.size());
+            similarityIndex += (majorRating + major.size()) * (((double)major.size()) / (double)this.currCase.hasMajorSx.size());
         }
         if (this.currCase.hasMajorSx.size() != 0) {
-            similarityIndex += minorRating * (((double)minor.size()) / (double)this.currCase.hasMajorSx.size());
+            similarityIndex += (minorRating + minor.size()) * (((double)minor.size()) / (double)this.currCase.hasMajorSx.size());
         }
         if (this.currCase.pain.painInfo.size() != 0) {
             similarityIndex += painRating * (((double)pain.size()) / (double)this.currCase.pain.painInfo.size());
