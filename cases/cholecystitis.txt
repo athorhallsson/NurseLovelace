@@ -2,8 +2,8 @@ Cholecystitis
 right_upper_quadrant epigastrium
 right_shoulder_blade
 sharp pleuritic constant four_hours eight_hours one_day two_days one_week worse_with_breathing worse_with_eating
-nausea vomiting loss_of_appetite
-fever malaise chills bloating jaundice indigestion
+nausea vomiting loss_of_appetite fever
+malaise chills bloating jaundice indigestion
 0
 1
 2

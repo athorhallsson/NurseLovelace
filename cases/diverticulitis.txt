@@ -2,8 +2,8 @@ Divericulitis
 left_lower_quadrant right_lower_quadrant suprapubic left_upper_quadrant
 
 dull constant four_hours eight_hours one_day two_days one_week better_with_lying_still worse_with_moving_around worse_with_eating
-fever loss_of_appetite
-bloating constipation diarrhea indigestion nausea vomiting chills
+fever loss_of_appetite nausea
+bloating constipation diarrhea indigestion vomiting chills
 0
 0
 1
