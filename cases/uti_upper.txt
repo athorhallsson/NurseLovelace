@@ -2,8 +2,8 @@ Urinary tract infection (upper)
 left_costovertebral right_costovertebral left_flank right_flank pelvic suprapubic
 left_groin right_groin
 dysuria dull constant four_hours eight_hours one_day two_days
-polyuria hematuria fever
-fatigue malaise nausea vomiting hypotension tachycardia cloudy_urine smelly_urine sense_of_incomplete_bladder_emptying
+polyuria hematuria fever tachycardia
+fatigue malaise nausea vomiting hypotension cloudy_urine smelly_urine sense_of_incomplete_bladder_emptying
 7
 3
 2
