@@ -152,7 +152,7 @@ $(document).ready(function() {
                     {
                         var obj = JSON.parse(text);
                         for (var ddx in obj) {
-                            $("#diagnosis").append('<p><input type="checkbox" name="' + obj[ddx] + '" id="' + obj[ddx] + '" value="' + obj[ddx] + '"/><label for="' + obj[ddx] + '">' + '  ' + obj[ddx] + '</label></p>');
+                            $("#diagnosis").append('<p><input type="checkbox" name="' + obj[ddx] + '" id="' + obj[ddx] + '" value="' + obj[ddx] + '"/><label for="' + obj[ddx] + '">' + obj[ddx] + '</label></p>');
                         }
                         $("input").on("click", function() {
                              $("#hidden-input").val($(this).val());
