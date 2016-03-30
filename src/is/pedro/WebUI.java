@@ -5,14 +5,9 @@ package is.pedro;
  */
 
 import static spark.Spark.*;
-
 import com.google.gson.Gson;
 import spark.servlet.SparkApplication;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.IntSummaryStatistics;
-import java.util.Iterator;
 
 public class WebUI implements SparkApplication {
 
@@ -87,6 +82,7 @@ public class WebUI implements SparkApplication {
 
             response.status(200);
             qSearch.update(symptom, hasSymptom);
+            qSearch.setToAsked(symptom);
             Integer nextIndex = qSearch.nextQuestion();
             return "{ \"symptom\":\""+ nextIndex +"\" }";
         });
@@ -123,6 +119,7 @@ public class WebUI implements SparkApplication {
                     newCase.addToHasMinor(sx);
                 }
             }
+
             newCase.age = currentCase.age;
             newCase.gender = currentCase.gender;
             newCase.hasNotMajorSx = currentCase.hasNotMajorSx;
@@ -139,8 +136,7 @@ public class WebUI implements SparkApplication {
         get("/done", (request, response) -> {
             response.status(200);
             ArrayList<String> ddxList = cbr.findDiagnosis(currentCase);
-            String ddxString = new Gson().toJson(ddxList);
-            return ddxString;
+            return new Gson().toJson(ddxList);
         });
 
         get("/symptoms", (request, response) -> {
@@ -163,6 +159,11 @@ public class WebUI implements SparkApplication {
                 sxList.add(sx);
             }
             return new Gson().toJson(sxList);
+        });
+
+        get("/reset", (request, response) -> {
+            init();
+            return response;
         });
 
     }

@@ -29,7 +29,12 @@ $(document).ready(function() {
             // Age dropdown list
             var ageSelect = $("#age" );
             for (i = 0; i < 120; i++) {
-                ageSelect.append('<option value="' + i + '">' + i + '</option>');
+                if (i == 40) {
+                    ageSelect.append('<option value="' + i + '" selected>' + i + '</option>');
+                }
+                else {
+                    ageSelect.append('<option value="' + i + '">' + i + '</option>');
+                }
             }
 
             // Pain lists
@@ -44,6 +49,11 @@ $(document).ready(function() {
 
             // INIT
             $("#initform-btn").on('click', function(e) {
+                if (symptoms.indexOf($("#main-symptom").val()) == -1) {
+                    $('#results').html('Please enter a valid symptom.').attr('class', 'alert alert-danger');
+                    return;
+                }
+
                 var painString = $("#pain-description").val() + "_" + $("#pain-when").val() + "_";
                 painString += $("#pain-long").val() + "_" + $("#pain-changes").val();
                 var pos =  $("#pain-position").val();
@@ -150,7 +160,19 @@ $(document).ready(function() {
                     data: null,
                     success : function(text)
                     {
+                        $("#question").hide();
+                        $("#add-more").hide();
                         var obj = JSON.parse(text);
+                        if (obj.length == 0) {
+                            getAllSymptoms();
+                            $("#results").html("Please have your doctor check the correct diagnosis and press proceed").attr('class', 'alert alert-success');
+                            $("#correct-diagnosis").show();
+                            return;
+                        }
+                        else {
+                            $("#confirm").show();
+                            $("#results").html('We really hope it is.').attr('class', 'alert alert-success');
+                        }
                         for (var ddx in obj) {
                             $("#diagnosis").append('<p><input type="checkbox" name="' + obj[ddx] + '" id="' + obj[ddx] + '" value="' + obj[ddx] + '"/><label for="' + obj[ddx] + '">' + obj[ddx] + '</label></p>');
                         }
@@ -159,10 +181,6 @@ $(document).ready(function() {
                         })
                     }
                 }).done(function() {
-                    $("#results").html('We really hope it is.').attr('class', 'alert alert-success');
-                    $("#question").hide();
-                    $("#add-more").hide();
-                    $("#confirm").show();
                 }).fail(function() {
                     $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
                 });
@@ -171,6 +189,10 @@ $(document).ready(function() {
             // ADD MORE
             var addMoreBtn = $("#add-more-btn-yes");
             addMoreBtn.click(function(event) {
+                if (symptoms.indexOf($("#add-more-box").val()) == -1) {
+                    $('#results').html('Please enter a valid symptom.').attr('class', 'alert alert-danger');
+                    return;
+                }
                 var answer = "true";
                 var symptom = symptoms.indexOf($("#add-more-box").val());
                 $.ajax({
@@ -185,6 +207,7 @@ $(document).ready(function() {
                         $("#symptom").html(symptoms[symptomIndex])
                     }
                 }).done(function() {
+                    $("#add-more-box").val("");
                     $("#add-more").hide();
                     $("#question").show();
                     $("#results").html('Symptom number ' + symptom + ' marked as ' + answer + '.').attr('class', 'alert alert-success');
@@ -220,11 +243,7 @@ $(document).ready(function() {
                 $.ajax({
                     type: "post",
                     url: "/addNewDiagnosis",
-                    data: 'majorSx=' + majorSx + '&newDx=' + newDx,
-                    success : function(text)
-                    {
-
-                    }
+                    data: 'majorSx=' + majorSx + '&newDx=' + newDx
                  }).done(function() {
                      $("#results").html("Thank you").attr('class', 'alert alert-success');
                      $("#correct-diagnosis").hide();
@@ -232,4 +251,18 @@ $(document).ready(function() {
                      $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
                  });
             };
+
+            // RESET
+            var resetBtn = $("#title");
+            resetBtn.click(function(event) {
+                $.ajax({
+                    type: "get",
+                    url: "/reset"
+                 }).done(function() {
+                     location.reload();
+                 }).fail(function() {
+                     $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
+                 });
+            });
+
         });
