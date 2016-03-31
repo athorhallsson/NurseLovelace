@@ -1,4 +1,4 @@
-﻿DROP TABLE IF EXISTS Cases, Diagnosis, SymptomNames, Symptoms, Positions, Pain, PainPosition, PainSx;
+﻿DROP TABLE IF EXISTS Cases, Diagnosis, SymptomNames, Symptoms, Positions, Pain, PainSx, PainPosition;
 
 CREATE TABLE Diagnosis (
 	dId serial,
@@ -141,7 +141,7 @@ CREATE TABLE Symptoms (
 	apraxia boolean,
 	tinnitus boolean,
 	dysarthria boolean,
-	dysgraphia boolean,
+	agraphia boolean,
 	dystonia boolean,
 	akinesia boolean,
 	alexia boolean,
@@ -184,14 +184,14 @@ CREATE TABLE SymptomNames (
 	PRIMARY KEY (sId)
 );
 
-CREATE TABLE PainPosition (
-	ppId serial,
-	ppName varchar(100) NOT NULL,
-	PRIMARY KEY (ppId)
-);
-
 CREATE TABLE PainSx (
 	psId serial,
 	psName varchar(100) NOT NULL,
 	PRIMARY KEY (psId)
+);
+
+CREATE TABLE PainPosition (
+	ppId serial,
+	ppName varchar(100) NOT NULL,
+	PRIMARY KEY (ppId)
 );

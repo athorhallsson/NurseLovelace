@@ -41,7 +41,7 @@ INSERT INTO SymptomNames (sName) VALUES ('steatorrhea');
 INSERT INTO SymptomNames (sName) VALUES ('apraxia');
 INSERT INTO SymptomNames (sName) VALUES ('tinnitus');
 INSERT INTO SymptomNames (sName) VALUES ('dysarthria');
-INSERT INTO SymptomNames (sName) VALUES ('dysgraphia');
+INSERT INTO SymptomNames (sName) VALUES ('agraphia');
 INSERT INTO SymptomNames (sName) VALUES ('dystonia');
 INSERT INTO SymptomNames (sName) VALUES ('akinesia');
 INSERT INTO SymptomNames (sName) VALUES ('alexia');

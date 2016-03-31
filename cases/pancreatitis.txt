@@ -1,0 +1,27 @@
+Pancreatitis
+right_upper_quadrant epigastrium left_upper_quadrant upper_back
+between_shoulder_blades
+sharp pleuritic constant four_hours eight_hours one_day two_days one_week worse_with_breathing worse_with_eating
+nausea vomiting loss_of_appetite
+diaphoresis bloating indigestion steatorrhea weight_loss tachycardia abdominal_distension
+0
+0
+1
+2
+5
+7
+7
+8
+9
+9
+10
+9
+8
+7
+7
+5
+2
+2
+1
+0
+60
