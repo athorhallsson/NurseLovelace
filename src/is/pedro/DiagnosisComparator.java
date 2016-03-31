@@ -9,10 +9,10 @@ public class DiagnosisComparator implements Comparator<Diagnosis> {
     @Override
     public int compare (Diagnosis d1, Diagnosis d2) {
         if (d1.getSimilarityIndex() > d2.getSimilarityIndex()) {
-            return  1;
+            return  -1;
         }
         if (d1.getSimilarityIndex() < d2.getSimilarityIndex()) {
-            return -1;
+            return 1;
         }
         return 0;
     }
