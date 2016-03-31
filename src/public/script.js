@@ -136,7 +136,7 @@ $(document).ready(function() {
                         $("#symptom").html(symptoms[symptomIndex])
                     }
                 }).done(function() {
-                    $("#results").html('Symptom number ' + symptom + ' marked as ' + answer + '.').attr('class', 'alert alert-success');
+                    $("#results").html('Symptom ' + symptoms[symptom] + ' marked as ' + answer + '.').attr('class', 'alert alert-success');
                     $("#confirm").hide();
                 }).fail(function() {
                     $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
@@ -171,7 +171,7 @@ $(document).ready(function() {
                         }
                         else {
                             $("#confirm").show();
-                            $("#results").html('We really hope it is.').attr('class', 'alert alert-success');
+                            $("#results").html('Please have your doctor check the correct diagnosis and press proceed').attr('class', 'alert alert-success');
                         }
                         for (var ddx in obj) {
                             $("#diagnosis").append('<p><input type="checkbox" name="' + obj[ddx] + '" id="' + obj[ddx] + '" value="' + obj[ddx] + '"/><label for="' + obj[ddx] + '">' + obj[ddx] + '</label></p>');
@@ -232,7 +232,7 @@ $(document).ready(function() {
                         })
                     }
                  }).done(function() {
-                     $("#results").html("Please have your doctor check the correct diagnosis and press proceed").attr('class', 'alert alert-success');
+                     $("#results").html("Please have your doctor check the major symptoms, enter a diagnosis and press send").attr('class', 'alert alert-success');
                      $("#correct-diagnosis").show();
                  }).fail(function() {
                      $('#results').html('Unable to connect to server...').attr('class', 'alert alert-danger');
