@@ -1,6 +1,0 @@
-Heart disease
-50
-30
-40
-sickness more_sick fever
-some_other_sick need_hospital
